@@ -13,11 +13,10 @@ lavaan 0.6-11
 here 1.0.1  
 ggpubr 0.4.0  
 
-<span style="color:red"> *WARNING: 
+*WARNING:*
 The script includes all simulations described in the manuscript.  
 For replicating, we recommend only running one simulation at a time.  
-Also note that simulations with 10000 iterations as described here take multiple hours to run.  
-*</span>
+Also note that simulations with 10000 iterations as described here take multiple hours to run. 
 
 ## Recreating the figures
 To recreate the figures from the manuscript, run the script 02_create_plots.
