@@ -1,6 +1,7 @@
-# SEM_Poweranalysis
-Tutorial on how to conduct simulation based power simulations in R.
-(Code for running the simulations described in Buchberger et al.)
+# Estimating Statistical Power for Structural Equation Models in Developmental Cognitive Science: A Tutorial in R
+
+A tutorial on how to conduct simulation based power analyses in R.
+(R Code for running the simulations described in Buchberger et al.)
 
 ## Running the simulation
 To run the simulation yourself, execute the R script 01_run_simulation. 
