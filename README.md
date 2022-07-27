@@ -1,7 +1,8 @@
 # Estimating Statistical Power for Structural Equation Models in Developmental Cognitive Science: A Tutorial in R
 
 A tutorial on how to conduct simulation based power analyses in R.  
-(R Code for running the simulations described in Buchberger et al.)
+(R Code for running the simulations described in Buchberger et al.)  
+Preprint available here: https://psyarxiv.com/gsdvz/
 
 ## Running the simulation
 To run the simulation yourself, execute the R script 01_run_simulation. 
