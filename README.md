@@ -21,6 +21,6 @@ For replicating, we recommend only running one simulation at a time.
 Also note that simulations with 10000 iterations as described here take multiple hours to run. 
 
 ## Recreating the figures
-To recreate the figures from the manuscript, run the script 02_create_plots.
-This script loads the result dataframes from the original simulation (5 separate rds result files) 
-and creates the plots in R.
+The code for recreating the result figures from the manuscript is included in the Rmd file.
+This code loads the result dataframes from the original simulation (5 separate rds result files) 
+and dynamically creates the plots when knitting the document.
