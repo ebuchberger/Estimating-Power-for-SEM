@@ -108,7 +108,7 @@ analyze_results <-
 
 #----summarize----
 summarize_results <-
-  function(condition, results, fixed_objects = NULL) {
+  function(condition, results) {
     rmsea_cut = 0.06
     cfi_cut = 0.95
     tidied <- results %>%
@@ -116,7 +116,7 @@ summarize_results <-
       mutate(model = names(fitmeasures)) %>%
       unnest_wider(fitmeasures) %>%
       mutate(admissable = (rmsea < rmsea_cut) & (cfi > cfi_cut))
-    ret <- (
+    ret <-
       tidied %>%
         group_by(rep) %>%
         summarise(
@@ -137,5 +137,5 @@ summarize_results <-
           best_3 = mean(model3_chosen),
           best_sim = mean(sim_model_chosen)
         ))
-    )
+      return(ret)
   }
