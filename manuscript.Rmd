@@ -53,10 +53,16 @@ output            : papaja::apa6_pdf
 ---
 
 ```{r setup, include = FALSE}
-library("papaja")
-r_refs("r-references.bib")
+library(papaja)
+library(tidyverse)
+library(ggpubr)
+library(here)
+library(SimDesign)
+
 knitr::read_chunk(here::here("R", "funs.R"))
-knitr::opts_chunk$set(echo = TRUE)
+knitr::read_chunk(here::here("01_run_simulation.R"))
+knitr::opts_chunk$set(echo = FALSE)
+
 builtin_source_hook <- knitr::knit_hooks$get('source')
 knitr::knit_hooks$set(source = function(x, options) {
   x <- grep("# HIDE$", x, invert = TRUE, value = TRUE)
@@ -73,7 +79,6 @@ knitr::knit_hooks$set(source = function(x, options) {
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
-
 
 # 1. Introduction
 Over the past decades, many psychological constructs that had originally been conceptualized as unitary entities have been shown to be multifactorial phenomena. A prominent example are the early debates about component factors of intelligence [@cattell_1971; @horn_1970; @horn_1978] or personality [@mccrae_1985]. But also more specialized cognitive abilities such as executive functions [@hedden_2006; @miyake_2000], attention [@mirsky_1991] or memory [@mcclelland_1995; @norman_2003; @schapiro_2017] are increasingly considered multi-process functions.  
@@ -97,7 +102,7 @@ Over the past decades, the issue of low statistical power and its consequences f
 Various rules of thumb on required sample size in SEM have been recommended, including setting an absolute minimum of observations across the board  [@boomsma_1985] and adjusting to the model complexity [i.e., setting a number of observations per estimated parameter, @bentler_1987]. Unfortunately, such heuristics can be misleading, as statistical power in SEM is heavily influenced by parameters beyond the number of indicators per latent construct, e.g. the magnitude of factor loadings [@wolf_2013]. Further, determining the required sample size for a given study depends on the research question. One common utility of SEM is to test whether a given effect in a model exceeds a specific threshold, such as testing whether the correlation of latent factors exceeds zero, or whether a specific parameter estimate differs between groups (i.e., target effect). Another common utility is to determine how well a given model describes the data, and/or whether one model describes the data better than a competing model (i.e., model comparison). These different research questions require different types of power: the power to detect a target effect vs. the power to detect model misspecification [@wang_2021]. Further, theoretical assumptions on competing models can lead to the necessity to compare non-nested models, which prevents the use of regular $\chi^2$-based power estimates and therefore requires alternative approaches to determining statistical power for SEM. 
 
 ### 1.2.1	Statistical Power to Detect a Specific Effect of Interest
-Central to many studies that employ SEM is the question of whether a specific parameter in a model (e.g., strength of a specific correlation or the slope parameter in a latent regression model) is different from a given value [e.g. @canada_2021]. Imagine that a researcher aims to test whether the correlation between two latent constructs significantly differs from zero. To this end, they would compare the model-fit between one model in which the correlation parameter is freely estimated and another model in which it is fixed to zero [@satorra_1985]. The corresponding null hypothesis in this case states that the parameter restrictions hold in the population. The difference in model fit will follow a $\chi^2$-distribution with degrees-of-freedom (*df*) equal to the difference of freely estimated parameters between the two models if the null hypothesis is true [@neale_2000; in this example *df* = 1, because only the correlation between the two latent factors is fixed in the restricted model]. If restricting the parameter of interest results in a significantly poorer model fit, this would suggest that the respective parameter indeed significantly differs from zero.
+Central to many studies that employ SEM is the question of whether a specific parameter in a model (e.g., strength of a specific correlation or the slope parameter in a latent regression model) is different from a given value [e.g. @canada_2021]. Imagine that a researcher aims to test whether the correlation between two latent constructs significantly differs from zero. To this end, they would compare the model-fit between one model in which the correlation parameter is freely estimated and another model in which it is fixed to zero [@satorra_1985]. The corresponding null hypothesis in this case states that the parameter restrictions hold in the population. The difference in model fit will follow a $\chi^2$-distribution with degrees-of-freedom (*df*) equal to the difference of freely estimated parameters between the two models if the null hypothesis is true [@neale_2000, in this example *df* = 1, because only the correlation between the two latent factors is fixed in the restricted model]. If restricting the parameter of interest results in a significantly poorer model fit, this would suggest that the respective parameter indeed significantly differs from zero.
 Following the logic outlined above, researchers can determine the statistical power for detecting a target effect in an SEM framework before conducting the study. A key aspect for this a-priori power calculation hinges on translating the differences in a specific parameter estimate into an effect size. Such translation can be achieved by investigating the discrepancy between the model-implied variance-covariance matrices associated with (1) the population model including the “true” parameter values and (2) the hypothesized model. The discrepancy between both matrices is quantified based on a specific fit function [for details on fit functions see @bollen_1989]. Recently, several user friendly tools have emerged that can guide modelers in quantifying effect sizes of a target effect to estimate statistical power in SEM [e.g. the R packages semPower @jobst_2021; or power4SEM @jak_2020 for analytical approaches; and the Shiny app pwrSEM @wang_2021; the interactive study planner tool LIFESPAN @brandmaier_2015;, or the R package simsem  @pornprasertmanit_2021 for simulation-based approaches]. As the investigation of a target effect practically translates into the comparison of nested models, researchers can in these cases analytically determine the statistical power and use this information for decisions on required sample size [@satorra_1985]. 
 
 ### 1.2.2	Statistical Power for Model Comparison 
@@ -112,7 +117,7 @@ An alternative prominent view is the classic dichotomy between episodic and sema
 Adopting a process-oriented view, recent computational models of memory have argued for a functionalist distinction between memory specificity and generalization through a labor division between the hippocampus and the cortex [@mcclelland_1995; @norman_2003]. Here, a set of neurocomputations support different memory demands. Important to learning specific episodes are pattern separation that discriminates between similar memories through the reduction of representational similarity, and pattern completion that retrieves linked associations among co-occurring elements [@marr_1971; @norman_2003; @rolls_2016]. Both of these computations are thought to be specialties of the hippocampus. In contrast, the cortex is well suited to slowly learn statistical regularities that enables generalization [@mcclelland_1995; @norman_2003]. Interestingly, rapid generalization also relies on the hippocampus, either via retrieval mechanisms of related episodes (Kumaran & McClelland, 2012) or via a distributed coding scheme carried by a specific subset of the hippocampal circuitry [@schapiro_2017]. From this vantage point, memory abilities take shape of a tri-partite structure, encompassing pattern separation, pattern completion and generalization as three separable mnemonic processes. 
 
 ```{r Figure1, fig.align = 'center', out.width= "100%", fig.cap = "Path diagrams of three competing SEMs on the structure of memory. Squares represent observed performance measures on the behavioral tasks. Circles represent latent constructs (PS = Pattern Separation, PC = Pattern Completion, GEN = Generalization). Single-headed arrows indicate regressions and double-headed arrows indicate covariances. See Buchberger et al., (2022) for in depth description of the models."}
-knitr::include_graphics( "Images/Figure1.png")
+knitr::include_graphics( "Images/Figure1.pdf")
 ```
 
 Which of these views best explain memory abilities across early development? This question requires adequate statistical methods that can adjudicate among multiple competing ideas on the underlying structure of memory. The simulation in the following section of this paper will address methodological challenges in study planning when aiming to compare three hypothetical models: a unitary model (Model 1), a bi-partite model (Model 2) and a tri-partite model (Model 3) on the compositional structure of memory (Figure 1). Specifically, we will focus on the issue of estimating statistical power for this model comparison. Here, we address the impact of two main aspects in particular: (i) the separability of the theoretical constructs, i.e. inter-relatedness of the latent factors in the competing models and (ii) the reliability of the measures, i.e. the loadings of the manifest variables. Details on the theoretical bases and the selection of methodological indicators for each model can be found in @buchberger_2022. Important for this context is the fact that our specification of Models 2 and 3 results in a non-nested model comparison (due to the cross-loadings for the latent factors pattern separation and pattern completion and different allocation of the indicator Task 10). Therefore a-priori estimations of statistical power call for a simulation-based approach.
@@ -124,17 +129,13 @@ In the following, we demonstrate how to conduct a simulation-based power analysi
 To investigate statistical power for deciding between competing theoretical non-nested models, we suggest a Monte Carlo simulation-based approach [@metropolis_1953]. Monte Carlo studies represent a computer-intensive simulation, that allows to approximate statistical power for a given study design [@muthen_2002]. While Monte Carlo simulations can be implemented for a variety of research questions, the flexibility of the approach makes them especially well-suited for obtaining a-priori power estimates for the comparison of non-nested SEMs. Furthermore, analytical approaches are tied to assumptions (e.g., no missing data, multivariate normality), whereas simulation-based approaches allow for arbitrary data generating processes. In Monte Carlo studies, synthetic data is repeatedly generated with a set of different hypothesized parameter values and analyzed across all samples. Summary statistics from the entirety of the simulated datasets are then used to draw conclusions [@muthen_2002; @paxton_2001]. The general procedure of Monte Carlo simulations follows a common core structure: (i) generate – in which multiple synthetic datasets are generated based on the hypothesized models, (ii) analyze – in which the synthetic data are analyzed for every iteration of the simulation, (iii) summarize – in which the results are pooled over all simulation iterations. This general procedure is applicable to a variety of scenarios. When comparing competing SEMs, it is necessary to specify the competing theoretical models, and decide on the simulation design, that is which model parameters of interest should be modified across the simulations. Finally, researchers need to evaluate the results from the simulation in order to derive practical implications from the simulation (see Figure 2). While these steps can be manually coded in a statistical research software, such as R, the implementation of a simulation can become increasingly complex and error-prone with increasing number of conditions that are being simulated. A useful tool which can guide a novice simulators in setting up a Monte Carlo simulation is the R package simDesign [@chalmers_2020], which facilitates the implementation of the internal logic of generate – analyze – simulate and can accommodate various research designs. All simulation steps in this study where therefore implemented within the simDesign package.
 
 ```{r Figure2, fig.align = 'center', out.width= "100%", fig.cap = "Schematic overview of the simulation process"}
-knitr::include_graphics( "Images/Figure2.png")
+knitr::include_graphics( "Images/Figure2.pdf")
 ```
 
 ### 2.1.1	Step 1: Specifying Competing SEMs
-The first step of the simulation is translating the theoretical assumptions about latent constructs of interest and the manifest variables into an SEM. This step entails a) specifying the number of latent factors (how many theoretical constructs are thought to influence the observed behavior in the manifest variables?), and b) the allocation of each manifest variable to (at least one) latent variable (which of the manifest variables captures the respective latent construct?). In R, the structure of a SEM can be easily implemented using lavaan syntax [@rosseel_2012]. Typically, useful operators for specifying a model entail factor loadings (=~), (co )variances (~~), and means or intercepts (~1). The tri-partite model (Figure 1, Model 3) could be specified in lavaan syntax as the following:  
+The first step of the simulation is translating the theoretical assumptions about latent constructs of interest and the manifest variables into an SEM. This step entails a) specifying the number of latent factors (how many theoretical constructs are thought to influence the observed behavior in the manifest variables?), and b) the allocation of each manifest variable to (at least one) latent variable (which of the manifest variables captures the respective latent construct?). In R, the structure of a SEM can be easily implemented using lavaan syntax [@rosseel_2012]. Typically, useful operators for specifying a model entail factor loadings (=~), (co )variances (~~), and means or intercepts (~1). The tri-partite model (Figure 1, Model 3) could be specified in lavaan syntax as the following: 
 
-``` {r, results = 'hide', echo = TRUE}
-model3 <-
-  'ps       =~ task1 + task2 + task3 + task4 + task5 + task6
-   pc       =~ task5 + task6 + task7 + task8 + task9
-   gen      =~ task10+ task11 + task12 + task13'
+```{r model3, echo = TRUE}
 ```
 
 The model is defined by a model string, which specifies three latent factors of memory (Pattern Separation [PS]; Pattern Completion, [PC]; Generalization, [GEN]) which are measured through the manifest variables (Tasks 1 to 13). Note that lavaan entails several user-friendly functions for fitting models that automatically include default settings for model components that are not explicitly specified (e.g. adding residual variances, covariances of exogenous latent variables). Thus, the model syntax can be kept very concise (check documentation of the respective function for full information on default settings).  
@@ -144,21 +145,19 @@ Estimating statistical power for model comparisons requires that researchers spe
 ### 2.1.2 Step 2: Simulation Design
 When defining the structure of the theoretical model for data generation, it is crucial to specify all parameters in the model, particularly the loading strength of the manifest variables, along with the means and (co-)variances of the latent factors. This step also requires the specification of which parameter values should be kept constant or modified across different simulation iterations. Parameters for which there are strong assumptions (e.g. derived from previous work) can be entered in the models and kept constant. Parameters for which the impact on statistical power is of interest should be included as a condition in the simulation design. For example, if the question pertains to how the reliability of the measures may impact the estimates of required sample size, different levels of loading strength can be included in the conditions for which data is being simulated. The createDesign() function of the simDesign package can be used to create a full list of conditions for the simulation. All parameters that should be varied in the simulation are included as arguments in the createDesign() function. Full crossings of all possible values for the different parameters are then generated as conditions for the simulation. Note, however, that the number of simulation conditions and therefore the required computation time increases exponentially for full combinations of all simulation conditions. Researchers should thus be mindful about the number of conditions in a given simulation to avoid overly computationally intensive simulations, which further can be increasingly difficult to interpret. If only specific combinations of the parameters in the simulation are of interest for a given research question, the resulting design data frame can be adjusted accordingly, e.g., by deleting specific rows from the data frame. Below is our design data frame that includes different simulation conditions for (i) the loading strength of the manifest variables and (ii) the sample sizes:   
 
-``` {r, eval = FALSE, echo = TRUE}
-design <- createDesign(loading_strength = seq(0.5, 0.9, 0.1), 
-                       samplesize       = seq(50, 200,5)
-)
+```{r design_load_model3, echo = TRUE}
 ```
 
 Here, the design for the Monte Carlo simulations consists of five loading strength conditions (i.e., 0.5 to 0.9 in increments of 0.1). The sample size is varied from 50 to 200 in increments of 5. In total, data for 155 conditions (5×31) are generated.
 
 ### 2.1.3	Step 3: Generate 
 Next, we define the mechanism to generate the synthetic data. An easy way to generating synthetic data within an SEM framework in R is the simulateData() function available in the lavaan package. Within the generate function, all parameters that are predetermined across iterations can be directly entered into the generating model syntax. However, all parameters that are supposed to be varied between different iterations of the simulation need to be accessed through the condition argument that is returned through the createDesign() function in step 2. Given our interests in the effect of loading strength and strength of covariance between the latent factors, we define these parameters in step 2 (Design) such that they can now be called via the condition argument in the generate function: 
-
 ```{r generate, echo = TRUE}
 ```
 
-Here, we define the generate function for the tripartite model. The factor loadings specified in step 2 (Design) are called from the condition argument such that they are varied across different iterations of the simulation, and are defined as a for syntax readability. For standardization purposes (that is, the total variance of each manifest variable summing up to 1), the loadings of indicators Task5 and Task6 are set to $\frac {a}{\sqrt{(2+2 \cdot cov1)}}$ to account for cross-loadings on multiple factors and are defined as b to ease syntax readability (cov1 = covariance between the latent factors pattern separation and pattern completion). The population model is defined by a model string, which specifies three latent factors (PS, PC, GEN), measured by the 13 manifest indicators (Task1 – Task13). The residual variances of the manifest variables are set to $1-a^2$ for standardization purposes. The covariance between the latent factors is set to the respective value from the condition argument. The data are simulated from the model syntax via the simulateData() function from the lavaan package and stored as dat. For the sake of clarity, all loadings and co-variances are spelled out separately (but see supplementary R code on github for rewriting the same model in a more concise syntax).
+\textcolor{red}{here we now show the shortened original syntax. Is this understandable, or replace with simpler, longer function? (see original ms)}
+
+Here, we define the generate function for the tripartite model. The factor loadings specified in step 2 (Design) are called from the condition argument such that they are varied across different iterations of the simulation, and are defined as a for syntax readability. For standardization purposes (that is, the total variance of each manifest variable summing up to 1), the loadings of indicators Task5 and Task6 are set to $\frac {a}{\sqrt{(2+2 \cdot cov1)}}$ to account for cross-loadings on multiple factors and are defined as b to ease syntax readability (cov1 = covariance between the latent factors pattern separation and pattern completion). The population model is defined by a model string, which specifies three latent factors (ps, pc, gen), measured by the 13 manifest indicators (task1 – task13). The residual variances of the manifest variables are set to $1-a^2$ for standardization purposes. The covariance between the latent factors is set to the respective value from the condition argument. The data are simulated from the model syntax via the simulateData() function from the lavaan package and stored as dat. For the sake of clarity, all loadings and co-variances are spelled out separately (but see supplementary R code on github for rewriting the same model in a more concise syntax).
 
 Note that the Monte Carlo simulation method does not limit researchers to the simulation of normally distributed data, but can be used with any form of data generating mechanism. Further, the simulation-based approach allows researchers to anticipate and investigate the effects of (planned) missingness in the data on estimates for statistical power [@brandmaier_2020;@schoemann_2014]. Here, different amounts and patterns of missingness can be entered into the simulation by removing data from the generated datasets. The resulting data can then be analyzed and summarized to investigate the effects of attrition, planned or random missingness on the estimates for statistical power. The implementation of these characteristics of the data is beyond the scope of this tutorial. However, in research scenarios in which violations of the normality assumption or missing data can be expected, researchers should consider a simulation-based approach to estimate statistical power, as the approach presented here is free from any assumptions on the data distribution.
 
@@ -166,6 +165,7 @@ Note that the Monte Carlo simulation method does not limit researchers to the si
 In this step, we define the analyze function, which specifies how the data generated in step 3 should be analyzed. For the comparison of non-nested models, we rely on a combination of relative and absolute model fit parameters. We fit each of the competing models to each of the simulated data sets using the sem() function from the lavaan package and extract different measures of model fit using the helper function get_fitmeasures() (see funs.R in the supplementary material on github), namely the Comparative Fit Index [CFI, @bentler_1990], root mean square error of approximation [RMSEA, @steiger_2016] and the Bayesian Information Criterion [BIC, @raftery_1986]. The function returns the fit measures, the simulation model that was used in the respective iteration and information on model convergence. The analyze function for the example on memory composition could thus look like this: 
 ```{r analyze, echo = TRUE}
 ```
+
 ### 2.1.5	Step 5: Summarize
 In step 5, we define how the results from the analyze step should be summarized. To this end, we extract how often the model used to generate the data (step 2) was actually recovered as the best fitting model. We implemented the following decision rules for identifying the best fitting model: (i) We define cut-off criteria for an adequate model fit according to established rules as CFI > .95 and RMSEA < 0.06 [@hu_1999]. (ii) Among the models that meet the cut-off criteria, we select the best fitting model for each data set based on the relative model fit (lowest BIC value). The goal of (i) and (ii) is to check whether the ground truth model that generated the data can be identified as the best fitting model in a given simulation run. For cases in which a given dataset does not converge for one of the models, we consider the outcome of these iterations as failing to recover the correct model. We summarize the proportion of successful model recovery for each combination of model parameters in the simulation separately. The summarize function that concatenates the results across simulation iterations for the example on the structure of memory in childhood could thus look like this:
 ```{r summarize, echo = TRUE}
@@ -175,22 +175,8 @@ First, the function restructures the results from the analyze function to obtain
 ### 2.1.6. Step 6: Running and Evaluating the Simulation
 
 In a final step, we call the runSimulation() function from the simDesign package to execute the consecutive steps outlined above. Running the simulation for our example could look like this:
-
-``` {r, results = 'hide', eval = FALSE, echo = TRUE}
-results_cov_model3 <-
-  runSimulation(
-    design = design_cov_model3,
-    replications = 10000,
-    generate = generate_data,
-    analyse = analyze_results,
-    summarise = summarise_results,
-    store_results = TRUE,
-    parallel = TRUE,
-    packages = c('SimDesign', 'lavaan', 'tidyverse'),
-    fixed_objects = fixed_objects
-  )
+```{r run_simulation_cov_model3, eval = FALSE, echo = TRUE}
 ```
-
 In this function, the pre-defined functions generate_data(), analyze_results() and summarise_results() are called. The number of replications is specified in the replications argument. To ensure a reasonable stability of the results, a sufficient number of replications is recommended. In our example, we simulated 10,000 datasets per condition. This leads to a standard error of the simulated power of less than 0.5%. The store_results argument can be used to store the individual results generated by the summarize function, allowing users to investigate the outcome on every iteration (in this example, the data frame containing all fit measures and convergence information for each iteration). Note however, that storing the individual results increases computation time and size of the resulting outcome arguments. The argument parallel can be used for parallel processing across multiple cores (e.g. when running the analysis on a computer cluster) to reduce computation time. If not specified otherwise, all available cores will be used per default when parallel = TRUE. 
 
 The output can then be used to examine power curves (see Figure 3) for each of the parameters of interest in the simulation. Power curves are line plots that depict how changing one variable (e.g. sample size) would affect the power of the test. In the example, we can plot power curves demonstrating the impact of the separability of the theoretical constructs, implemented as the strength of the covariance between the latent factors, or the impact of the reliability of the measures, implemented as the strength of the loadings, on power estimation. Importantly, these data reveal the relative importance of different model parameters on sample size requirements. To obtain easily readable outputs, we plot the sample size from the simulation (x-axis) against the frequency with which the data-generating model was correctly recovered as the best fitting model (y-axis). To derive estimates on the required sample size in the example presented here, we aimed for a power of 95% in recovering the ground truth model as the best fitting model. 
@@ -200,29 +186,207 @@ The output can then be used to examine power curves (see Figure 3) for each of t
 ## 3.1 What is the Impact of the Separability of Theoretical Models on Estimates of Statistical Power?
 
 In the example of comparing competing models of memory structure, we first examined the separability of the theoretical models by investigating the influence of the latent factors’ correlations on statistical power estimates. In our example simulation, we investigated the statistical power to retrieve Model 3 as the best fitting model, when it indeed generated the data, while varying sample sizes from 50 to 200 and factor inter-correlations from 0.1 to 0.9. In this case, we restricted the simulated correlations between the latent factors to positive values as there is no indication in the literature to suspect a negative relation among these memory capacities [e.g., @tucker-drob_2019]. Figure 3A displays the obtained power curves illustrating the estimated statistical power dependent on the total sample size and the factor inter-correlation. For this estimate, the loading of the manifest variables was fixed at 0.7 and the inter-correlation between all latent factors were varied simultaneously.  
-
 As expected, statistical power increased with increasing sample size. However, the separability of the latent factors mattered: The higher the correlations between factors, the less able we were to distinguish multi-factor models from a one-factor model. That is, the smaller the difference between competing models, the greater the sample size that would be required to dissociate between them with adequate power. For very high levels of inter-correlation (0.8 and higher) the increase of statistical power with increasing sample size was remarkably lower than for lower levels of inter-correlation (0.7 and below). When the inter-factor correlation was 0.9, not even a larger sample size (*N* =200) achieved an adequate level of power of 80%. These results are not surprising given that increasing the inter-correlations between the latent factors renders the models more similar to each other, and thus makes their distinction more challenging. For moderate levels of inter-correlation (<= 0.7) a statistical power of 95% was reached for *N* = 120. 
 
 ## 3.2	What is the Impact of the Reliability of Manifest Variables on Estimates of Statistical Power?
 
 In a second step, we further examined the effect of the construct reliability on statistical power by investigating the loading strength of the manifest variables. To this end we conducted a second simulation following the steps outlined above while varying the sample size from 50 to 200 and the loadings of the manifest variables from 0.5 to 0.9. Figure 3B displays the obtained power curves, illustrating statistical power dependent on total sample size and loading strength of the manifest variables. For this estimate, the factor inter-correlation was set to 0.3. Again, increasing sample size lead to higher statistical power. However, the loading strength impacted estimates of statistical power: the higher the loadings of the manifest variables, the higher the statistical power achieved by a given sample size. For reasonably high levels of factor loadings (>= 0.7) a statistical power of 95% was reached for *N* = 120. 
-# ```{r, echo= FALSE}
-# source(here::here('02_create_plots.R'), local = knitr::knit_global())
-# print(plot_load_model3)
-# ```
+
+```{r, echo = FALSE, fig.width=11.3, fig.height=4.3, fig.align = 'center', fig.cap = "Simulation results: Estimated statistical power for recovering the data-generating model, i.e. Model 3 (y-axis) as a function of sample size (x-axis) with varying the factor inter-correlations when the loading strength was fixed to 0.7 (A) $;$ and with varying the loading strength when the factor inter-correlation was fixed to 0.3 (B). For each combination of parameters, 10,000 datasets were simulated. The red dashed horizontal line positioned at 95\\% discovery rate reflects the cut-off for identifying the appropriate sample size. The syntax to generate these plots with ggplot() can be found in the supplementary R Code on github"}
+
+theme_plots <- theme(
+  panel.background = element_blank(),
+  panel.grid.major = element_line(color = "grey95"),
+  legend.key       = element_rect(fill = NA),
+  axis.line        = element_line(
+    colour = "black",
+    size = 0.5,
+    linetype = "solid"
+  ),
+  axis.text.x      = element_text(
+    size = 16,
+    family = "sans",
+    hjust = 0.5,
+    vjust = -0.5
+  ),
+  axis.text.y      = element_text(
+    size = 16,
+    family = "sans",
+    hjust = 0,
+    vjust = 0.5
+  ),
+  axis.title.x     = element_text(
+    size = 20,
+    hjust = 0.5,
+    vjust = -0.5
+  ),
+  axis.title.y     = element_text(
+    size = 20,
+    hjust = -0.1,
+    vjust = 0.5
+  ),
+  plot.title       = element_text(
+    lineheight = .8,
+    face = "bold",
+    size = 22
+  ),
+  legend.title     = element_text(size = 20),
+  legend.text      = element_text(size = 18),
+  legend.position  = "right"
+)
+
+results_load_model3 <-
+  readRDS(here::here("results_load_model3.rds"))
+results_cov_model3  <- readRDS(here::here("results_cov_model3.rds"))
+
+plot_cov_model3 <- results_cov_model3 %>%
+  ggplot(aes(samplesize, best_3 * 100, colour = factor(cov1))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            size = 1.3,
+            key_glyph = "rect") +
+  geom_hline(
+    yintercept = 95,
+    linetype = "dashed",
+    color = "#F29090",
+    size = 1.3
+  ) +
+  xlab('Sample size') + ylab('Power (%)') + ggtitle('A \n') +
+  scale_color_discrete('Inter-factor \ncorrelation') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 20)
+  ) +
+  theme_plots
+
+plot_load_model3 <- results_load_model3 %>%
+  ggplot(aes(samplesize, best_3 * 100, colour = factor(loading_strength))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            size = 1.3,
+            key_glyph = "rect") +
+  geom_hline(
+    yintercept = 95,
+    linetype = "dashed",
+    color = "#F29090",
+    size = 1.3
+  ) +
+  xlab('Sample size') + ylab('Power (%)') + ggtitle('B \n') +
+  scale_color_discrete('loading       \nstrength') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 20)
+  ) +
+  theme_plots
+
+joined_plot <-
+  ggarrange(plot_cov_model3,
+            plot_load_model3,
+            ncol = 2,
+            nrow = 1)
+joined_plot
+```
 
 ## 3.3	How can Simulations Inform us About Type-I Error Rates?
 The main part of this tutorial has focused on estimating statistical power that is required to reject a null hypothesis when it is indeed false (Type-II error). However, it is necessary to also consider the reverse — rejecting a null hypothesis that is in fact true (Type-I error). In our example, Type-I error would be committed by misidentifying Model 3 as the best fitting model when in reality, the data were generated from either Models 1 or 2. We can leverage the simulation approach to quantify Type-I error rates dependent on the different simulation conditions (e.g., inter-factor correlations, factor loadings). We conducted an analogous analysis to the one outlined above (sections 2.1.1. – 2.1.6), with the difference that Models 1 and 2 are defined as the generating population models (step 3, section 2.1.3). The outcomes of this analysis show the probability of erroneously identifying an overly complex model, when the more simplistic models generated the data (see Figure 4).  
 
-# INSERT FIGURE 4!
-#```{r, echo= FALSE}
-# source(here::here('02_create_plots.R'), local = knitr::knit_global())
-# xxx
-# ```  
+```{r, echo = FALSE, fig.align='center', fig.height=8., fig.width=11.3, fig.cap = "Simulation results: Probability to erroneously pick Model 3 as the best fitting model when indeed Model 1 (A1) or Model 2 (A2/B2) generated the data, as a function of total sample size (x-axis) and the loadings strength of the manifest variables (A1/A2) or the strength of the covariance of the latent factors (B2). Note that the y-axis reaches from 0 to 20\\% for the sake of visibility."}
+
+results_load_model1 <-
+  readRDS(here::here("results_load_model1.rds"))
+results_load_model2 <-
+  readRDS(here::here("results_load_model2.rds"))
+results_cov_model2  <- readRDS(here::here("results_cov_model2.rds"))
+results_load_model3 <-
+  readRDS(here::here("results_load_model3.rds"))
+results_cov_model3  <- readRDS(here::here("results_cov_model3.rds"))
+
+plot_load_model1 <- results_load_model1 %>%
+  ggplot(aes(samplesize, best_3 * 100, colour = factor(loading_strength))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            size = 1.3,
+            key_glyph = "rect") +
+  xlab('Sample size') + ylab('Error Rate (%)') + ggtitle('A1 \n') +
+  scale_color_discrete('loading    \nstrength') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 20),
+    breaks = seq(0, 100, by = 5)
+  ) +
+  theme_plots
+
+plot_load_model2 <- results_load_model2  %>%
+  ggplot(aes(samplesize, best_3 * 100, colour = factor(loading_strength))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            size = 1.3,
+            key_glyph = "rect") +
+  xlab('Sample size') + ylab('Error Rate (%)') + ggtitle('A2 \n') +
+  scale_color_discrete('loading \nstrength') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 20),
+    breaks = seq(0, 100, by = 5)
+  ) +
+  theme_plots
+plot_cov_model2 <- results_cov_model2 %>%
+  ggplot(aes(samplesize, best_3 * 100, colour = factor(cov1))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            size = 1.3,
+            key_glyph = "rect") +
+  xlab('Sample size') + ylab('Error Rate (%)') + ggtitle('B1 \n') +
+  scale_color_discrete('inter-factor \ncovariance') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0.0, 20),
+    breaks = seq(0, 100, by = 5)
+  ) +
+  theme_plots
+
+joined_plot <-
+  ggarrange(
+    plot_load_model1,
+    NULL ,
+    plot_load_model2,
+    plot_cov_model2,
+    ncol = 2,
+    nrow = 2
+  )
+joined_plot
+
+```
+  
 The results of this analysis reveal that even for low levels of loadings strength (< 0.7), the probability of erroneously picking Model 3 as the best fitting model is reasonably low (< 7%). Likewise, this probability remains reasonably low for different levels of inter-factor correlations for all sample sizes (< 5%). Thus, in this specific model comparison Type-I error probability does not appear to be the main aspect driving sample size requirements for an informative research design. 
-
 ## 3.4	Deriving a Sample Estimate From the Simulation Results
-
 To derive a joint sample size estimate from the different parameters in the simulation, it is crucial to reiterate the theoretical assumptions on the strength of all parameters investigated in the simulation. In our illustration, it is reasonable to assume that the latent factors in the tri-partite model (Model 3, Figure 1) are only moderately correlated (below 0.7). Therefore, our model comparison requires a sample size of *N* = 120 to reach statistical power of 95% to adjudicate between the theoretical models, if the hypothesized model (Model 3) generates the data. We further assume that the manifest variables capture the latent constructs reasonably well — that is, exerting a loading strength of 0.7 or above. The results of the simulation suggest that *N* = 120 would suffice to achieve 95% with regard to the reliability of the manifest factors. In our example, the results of both analyses align, such that a sample size of *N* = 120 suffices to achieve a power of 95% regarding both the separability of the theoretical constructs and the reliability of the indicators. In cases where the derived sample estimate differs between the two analyses we suggest to derive the more conservative estimate of required sample size from the two simulations.
 The results from the Type-I error analysis further indicate, that the probability of erroneously choosing an overly complex model is generally low. Therefore, the probability of committing a Type-I error for the sample size derived from the simulations on model separability and measurement reliability (*N* = 120) is negligible. 
 
