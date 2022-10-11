@@ -78,7 +78,7 @@ results_cov_model3 <-
     replications = 10000,
     generate = generate_data,
     analyse = analyze_results,
-    summarise = summarise_results,
+    summarise = summarize_results,
     store_results = TRUE,
     parallel = TRUE,
     packages = c('SimDesign', 'lavaan', 'tidyverse'),
