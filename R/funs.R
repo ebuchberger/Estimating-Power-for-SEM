@@ -1,8 +1,9 @@
-## Estimating Statistical Power for Structural Equation Models in Developmental Science:
-## A Tutorial in R, Buchberger et al.
+## Estimating Statistical Power for Structural Equation Models in
+## Developmental Science: A Tutorial in R, Buchberger et al.
 ## - Define required functions
 
-# 1. Helper functions for the simulation ---------------------------------
+# _____________ 1. Helper functions for the simulation ______________________
+#----helper_functions----
 is_converged <- function(x) {
   isTRUE(lavInspect(x, 'converged'))
 }
@@ -22,35 +23,37 @@ get_fitmeasures <-
     }
   }
 
-# 2. Main functions for the simulation ---------------------------------
+# _______________ 2. Main functions for the simulation ______________________
 
-# Step 3 - Generate
+#----generate----
 generate_data <- function(condition, fixed_objects = NULL) {
-  a = condition$loading_strength
-  if (condition$sim_model == 1) {
-    pop_model <-
-      paste0(
-        paste0("mem =~", paste0(a, "*task", 1:13 , collapse = "+")),
-        ";",
-        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" , collapse = "")
-      )
-    
-  } else if (condition$sim_model == 2) {
-    pop_model <-
-      paste0(
-        "em =~" ,
-        paste0(a, "*task", 1:10  , collapse = "+"),
-        ";",
-        "sem =~",
-        paste0(a, "*task", 11:13 , collapse = "+"),
-        ";",
-        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" , collapse = ""),
-        "em ~~",
-        condition$cov1,
-        "*sem"
-      )
-    
-  } else if (condition$sim_model == 3) {
+  a <- condition$loading_strength
+  if (condition$sim_model == 1){                                       # HIDE
+    pop_model <-                                                       # HIDE
+      paste0(                                                          # HIDE
+        paste0("mem =~", paste0(a, "*task", 1:13 , collapse = "+")),   # HIDE
+        ";",                                                           # HIDE
+        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" , # HIDE
+               collapse = "")                                          # HIDE
+      )                                                                # HIDE
+                                                                       # HIDE
+  } else if (condition$sim_model == 2) {                               # HIDE
+    pop_model <-                                                       # HIDE
+      paste0(                                                          # HIDE
+        "em =~" ,                                                      # HIDE
+        paste0(a, "*task", 1:10  , collapse = "+"),                    # HIDE
+        ";",                                                           # HIDE
+        "sem =~",                                                      # HIDE
+        paste0(a, "*task", 11:13 , collapse = "+"),                    # HIDE
+        ";",                                                           # HIDE
+        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" , # HIDE
+               collapse = ""),                                         # HIDE
+        "em ~~",                                                       # HIDE
+        condition$cov1,                                                # HIDE
+        "*sem"                                                         # HIDE
+      )                                                                # HIDE
+                                                                       # HIDE
+  } else if (condition$sim_model == 3) {                               # HIDE
     b <- a / sqrt(2 + 2 * condition$cov1)
     pop_model <-
       paste0(
@@ -71,7 +74,8 @@ generate_data <- function(condition, fixed_objects = NULL) {
         "gen=~",
         paste0(a, "*task", 10:13 , collapse = "+"),
         ";",
-        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" , collapse = ""),
+        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" ,
+               collapse = ""),
         "ps ~~",
         condition$cov1,
         "*pc;",
@@ -82,12 +86,12 @@ generate_data <- function(condition, fixed_objects = NULL) {
         condition$cov3,
         "*gen"
       )
-  }
+  }                                                                    # HIDE
   dat <-
     data.frame(simulateData(pop_model, sample.nobs = condition$samplesize))
 }
 
-# Step 4 - Analyze
+#----analyze----
 analyze_results <-
   function(condition, dat, fixed_objects = fixed_objects) {
     fits <- map(fixed_objects, ~ sem(., dat, std.lv = TRUE))
@@ -102,8 +106,8 @@ analyze_results <-
     )
   }
 
-#Step 5 - Summarize
-summarise_results <-
+#----summarize----
+summarize_results <-
   function(condition, results, fixed_objects = NULL) {
     rmsea_cut = 0.06
     cfi_cut = 0.95
