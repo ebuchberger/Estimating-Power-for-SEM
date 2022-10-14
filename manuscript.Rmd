@@ -37,7 +37,7 @@ abstract: |
 keywords          : "structural equation modelling, statistical power, Monte Carlo simulation, sample size planning"
 wordcount         : "`r tryCatch(wordcountaddin::word_count(here::here('manuscript.Rmd')), error=function(err) 'NA')`"
 
-bibliography      : "Power Simulation Manuscript.bib"
+bibliography      : "references.bib"
 
 floatsintext      : yes
 linenumbers       : no
