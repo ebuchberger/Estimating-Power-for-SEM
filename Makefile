@@ -5,7 +5,7 @@ WORKDIR := $(CURDIR)
 all: manuscript.pdf
 
 manuscript.pdf: manuscript.tex
-publish/ manuscript.pdf
+publish/: manuscript.pdf
 
 include .repro/Makefile_publish
 
