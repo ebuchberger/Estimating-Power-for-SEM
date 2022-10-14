@@ -1,0 +1,1 @@
+RUN tlmgr install apa6 threeparttable endfloat framed was multirow threeparttablex environ trimspaces xpatch csquotes
