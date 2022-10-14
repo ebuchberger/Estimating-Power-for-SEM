@@ -11,7 +11,7 @@ author:
   - name          : "Chi T. Ngo"
     affiliation   : "1"
   - name          : "Aaron Peikert"
-    affiliation   : "1"
+    affiliation   : "1, 2"
   - name          : "Andreas M. Brandmaier"
     affiliation   : "1,2,3"
   - name          : "Markus Werkle-Bergner"
