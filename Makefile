@@ -5,6 +5,9 @@ WORKDIR := $(CURDIR)
 all: manuscript.pdf
 
 manuscript.pdf: manuscript.tex
+publish/ manuscript.pdf
+
+include .repro/Makefile_publish
 
 ### Wrap Commands ###
 # if a command is to be send to another process e.g. a container/scheduler use:
