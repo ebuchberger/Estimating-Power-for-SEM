@@ -75,7 +75,7 @@ design_load_model3 <- createDesign(
 results_cov_model3 <-
   runSimulation(
     design = design_cov_model3,
-    replications = 10000,
+    replications = 100,
     generate = generate_data,
     analyse = analyze_results,
     summarise = summarize_results,
