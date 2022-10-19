@@ -10,7 +10,7 @@ library(tidyverse)
 library(here)
 source(here::here("R", "funs.R"))
 set.seed(12345)
-nreplications <- 10
+nreplications <- 1000
 
 #  _________________________ Step 1: Specify models _________________________
 
