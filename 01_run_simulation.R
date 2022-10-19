@@ -15,16 +15,16 @@ set.seed(12345)
 
 #----model1 ----
 model1 <-
-  'mem      =~ task1  + task2  + task3 + task4 + task5 + task6 + task7 + task8 + task9 + task10 + task11 + task12 + task13'
+  'mem =~ task1  + task2  + task3 + task4 + task5 + task6 + task7 + task8 + task9 + task10 + task11 + task12 + task13'
 #----model2----
 model2 <-
-  'em       =~ task1 + task2 + task3 + task4 + task5 + task6 + task7 + task8 + task9 + task10
-   sem      =~ task11 + task12 + task13'
+  'em  =~ task1 + task2 + task3 + task4 + task5 + task6 + task7 + task8 + task9 + task10
+   sem =~ task11 + task12 + task13'
 #----model3----
 model3 <-
-  'ps       =~ task1 + task2 + task3 + task4 + task5 + task6
-   pc       =~ task5 + task6 + task7 + task8 + task9
-   gen      =~ task10+ task11 + task12 + task13'
+  'ps  =~ task1 + task2 + task3 + task4 + task5 + task6
+   pc  =~ task5 + task6 + task7 + task8 + task9
+   gen =~ task10+ task11 + task12 + task13'
 #----fixedobjects----
 fixed_objects <-
   list(model1 = model1,
@@ -37,11 +37,11 @@ fixed_objects <-
 #----design_cov_model3 ----
 design_cov_model3 <- createDesign(
   loading_strength = 0.7,
-  samplesize       = seq(50, 200, 5),
-  sim_model        = c(3),
-  cov1             = seq(0.1, 0.9, 0.1),
-  cov2             = seq(0.1, 0.9, 0.1),
-  cov3             = seq(0.1, 0.9, 0.1)
+  sample_size = seq(50, 200, 5),
+  sim_model = c(3),
+  cov1 = seq(0.1, 0.9, 0.1),
+  cov2 = seq(0.1, 0.9, 0.1),
+  cov3 = seq(0.1, 0.9, 0.1)
 )
 
 design_cov_model3 <-
@@ -52,11 +52,11 @@ design_cov_model3 <-
 #----design_load_model3 ----
 design_load_model3 <- createDesign(
   loading_strength = seq(0.5, 0.9, 0.1),
-  samplesize       = seq(50, 200, 5),
-  sim_model        = c(3), # HIDE
-  cov1             = 0.3,  # HIDE
-  cov2             = 0.3,  # HIDE
-  cov3             = 0.3   # HIDE
+  sample_size = seq(50, 200, 5),
+  sim_model = c(3), # HIDE
+  cov1 = 0.3,  # HIDE
+  cov2 = 0.3,  # HIDE
+  cov3 = 0.3   # HIDE
 )
 #---- ----
 # _____________________________ Step 3: Generate ____________________________
@@ -120,7 +120,7 @@ results_df_load_model3 <-
 ## A1) Generating model: model1, loadings varied
 #----design_load_model1----
 design_load_model1 <- createDesign(
-  samplesize = seq(50, 200, 5),
+  sample_size = seq(50, 200, 5),
   loading_strength = seq(0.9, 0.5, -0.1),
   sim_model = c(1)
 )
@@ -148,7 +148,7 @@ results_df_load_model1 <-
 ## A2) generating model: model2, loadings varied
 #----design_load_model2----
 design_load_model2 <- createDesign(
-  samplesize = seq(50, 200, 5),
+  sample_size = seq(50, 200, 5),
   loading_strength = seq(0.9, 0.5, -0.1),
   sim_model = c(2),
   cov1 = 0.3,
@@ -179,12 +179,12 @@ results_df_load_model2 <-
 ## B2) generating model: model2, inter-factor correlation varied
 #----design_cov_model2----
 design_cov_model2 <- createDesign(
-  samplesize       = seq(50, 200, 5),
+  sample_size = seq(50, 200, 5),
   loading_strength = 0.7,
-  sim_model        = c(2),
-  cov1             = seq(0.1, 0.9, 0.1),
-  cov2             = seq(0.1, 0.9, 0.1),
-  cov3             = seq(0.1, 0.9, 0.1)
+  sim_model = c(2),
+  cov1 = seq(0.1, 0.9, 0.1),
+  cov2 = seq(0.1, 0.9, 0.1),
+  cov3 = seq(0.1, 0.9, 0.1)
 )
 design_cov_model2 <-
   design_cov_model2 %>% filter(cov1 == cov2 & cov2 == cov3)

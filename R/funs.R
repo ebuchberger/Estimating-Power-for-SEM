@@ -28,7 +28,7 @@ get_fitmeasures <-
 #----generate----
 generate_data <- function(condition, fixed_objects = NULL) {
   a <- condition$loading_strength
-  if (condition$sim_model == 1){                                       # HIDE
+  if (condition$sim_model == 1) {                                       # HIDE
     pop_model <-                                                       # HIDE
       paste0(                                                          # HIDE
         paste0("mem =~", paste0(a, "*task", 1:13 , collapse = "+")),   # HIDE
@@ -88,7 +88,7 @@ generate_data <- function(condition, fixed_objects = NULL) {
       )
   }                                                                    # HIDE
   dat <-
-    data.frame(simulateData(pop_model, sample.nobs = condition$samplesize))
+    data.frame(simulateData(pop_model, sample.nobs = condition$sample_size))
 }
 
 #----analyze----
@@ -99,7 +99,7 @@ analyze_results <-
     ret <- list(
       fitmeasures = ms,
       sim_model = condition$sim_model,
-      samplesize = condition$samplesize,
+      sample_size = condition$sample_size,
       loadingstrength = condition$loading_strength,
       covariance = condition$cov1,
       converged = map_lgl(fits, is_converged)
@@ -121,7 +121,7 @@ summarize_results <-
         group_by(rep) %>%
         summarise(
           sim_model = unique(sim_model),
-          best  = if (any(converged == FALSE)) {
+          best = if (any(converged == FALSE)) {
             0
           } else if (is_empty(bic[admissable])) {
             0
