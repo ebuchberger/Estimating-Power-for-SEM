@@ -13,6 +13,7 @@ RUN tlmgr install apa6 threeparttable endfloat framed was multirow threeparttabl
 RUN install2.r --error --skipinstalled \ 
   ggpubr \ 
   here \ 
+  lavaan \ 
   papaja \ 
   SimDesign \ 
   tidyverse
