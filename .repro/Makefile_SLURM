@@ -8,6 +8,5 @@ NAME = POWERSEM
 QFLAGS = -q $(QUEUE) --cpus-per-task $(CORES) --time $(WALLTIME) --mem $(MEMORY) --job-name $(NAME)
 
 ifeq ($(SLURM),TRUE)
-	QRUN1 := sbatch $(QFLAGS) --wrap "
-	QRUN2 := "
+	QRUN1 := sbatch $(QFLAGS) --wrap
 endif
