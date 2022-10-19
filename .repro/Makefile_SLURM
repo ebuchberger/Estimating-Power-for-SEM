@@ -1,7 +1,7 @@
 ### SLURM Options ###
 # see tardis.mpib.berlin.mpg.de/docs
 WALLTIME = 10:00:00
-MEMORY = 3gb
+MEMORY = 20gb
 QUEUE = default
 CORES = 32
 NAME = POWERSEM
