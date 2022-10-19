@@ -1,0 +1,9 @@
+### SLURM Options ###
+# see tardis.mpib.berlin.mpg.de/docs
+WALLTIME = 0:05:00
+MEMORY = 3gb
+QUEUE = default
+CORES = 4
+NAME = POWERSEM
+QFLAGS = --workdir $(CURDIR) -q $(QUEUE) --cpus-per-task $(CORES) --time $(WALLTIME) --mem $(MEMORY) --job-name myjob $(NAME)
+

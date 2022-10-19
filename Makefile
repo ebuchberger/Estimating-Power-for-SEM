@@ -1,11 +1,16 @@
 PROJECT := estimatingpowerforsem
 WORKDIR := $(CURDIR)
+INTERMEDIATE := FALSE
 
 # list below your targets and their recipies
 all: manuscript.pdf
 
 manuscript.pdf: manuscript.tex
-publish/ manuscript.pdf
+
+publish/: manuscript.pdf
+
+intermediate_results.zip: R/run_simulation.R R/funs.R
+	$(RUN1) Rscript -e "source('$<')"
 
 include .repro/Makefile_publish
 
@@ -25,3 +30,8 @@ include .repro/Makefile_Rmds
 WINPATH = //c/Users/someuser/Documents/myproject/
 include .repro/Makefile_Docker
 
+### Singulartiy ###
+include .repro/Makefile_Singularity
+
+### SLURM ###
+include .repro/Makefile_SLURM

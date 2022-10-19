@@ -1,0 +1,16 @@
+### Singularity Command ###
+SFLAGS = -H $(CURDIR):$(DHOME) $(PROJECT).sif
+
+ifeq ($(SINGULARITY),TRUE)
+	SRUN := singularity $(SCMD) $(SFLAGS)
+	current_dir=/home/rstudio
+endif
+
+### Singularity Image ###
+
+singularity: $(PROJECT).sif
+
+.PHONY: $(PROJECT).sif
+
+$(PROJECT).sif:
+	singularity build $@ docker://ghcr.io/ebuchberger/estimating-power-for-sem:main
