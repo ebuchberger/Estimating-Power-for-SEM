@@ -2,3 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+intermediate_results/
+intermediate_results.zip
+*.pdf
+*.tex
+*_files/
+*.log
