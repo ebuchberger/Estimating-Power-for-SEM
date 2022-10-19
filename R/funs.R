@@ -108,7 +108,7 @@ analyze_results <-
 
 #----summarize----
 summarize_results <-
-  function(condition, results) {
+  function(condition, results, fixed_objects = NULL) {
     rmsea_cut = 0.06
     cfi_cut = 0.95
     tidied <- results %>%
