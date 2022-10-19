@@ -52,6 +52,7 @@ classoption       : "man"
 output            : papaja::apa6_pdf
 repro:
   packages:
+    - lavaan
     - papaja
     - tidyverse
     - ggpubr
