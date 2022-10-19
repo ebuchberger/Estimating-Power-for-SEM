@@ -2,7 +2,7 @@
 SFLAGS = -H $(CURDIR):$(DHOME) $(PROJECT).sif
 
 ifeq ($(SINGULARITY),TRUE)
-	SRUN := singularity $(SCMD) $(SFLAGS)
+	SRUN := singularity run $(SFLAGS)
 	current_dir=/home/rstudio
 endif
 
