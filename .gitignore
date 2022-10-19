@@ -8,3 +8,4 @@ intermediate_results.zip
 *.tex
 *_files/
 *.log
+*.sif
