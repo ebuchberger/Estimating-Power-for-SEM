@@ -12,6 +12,7 @@ RUN MRAN=https://mran.microsoft.com/snapshot/${BUILD_DATE} \
 RUN install2.r --error --skipinstalled \ 
   ggpubr \ 
   here \ 
+  lavaan \ 
   papaja \ 
   SimDesign \ 
   tidyverse
