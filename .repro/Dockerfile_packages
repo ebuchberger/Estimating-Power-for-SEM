@@ -1,0 +1,6 @@
+RUN install2.r --error --skipinstalled \ 
+  ggpubr \ 
+  here \ 
+  papaja \ 
+  SimDesign \ 
+  tidyverse

@@ -11,7 +11,7 @@ author:
   - name          : "Chi T. Ngo"
     affiliation   : "1"
   - name          : "Aaron Peikert"
-    affiliation   : "1"
+    affiliation   : "1, 2"
   - name          : "Andreas M. Brandmaier"
     affiliation   : "1,2,3"
   - name          : "Markus Werkle-Bergner"
@@ -37,7 +37,7 @@ abstract: |
 keywords          : "structural equation modelling, statistical power, Monte Carlo simulation, sample size planning"
 wordcount         : "`r tryCatch(wordcountaddin::word_count(here::here('manuscript.Rmd')), error=function(err) 'NA')`"
 
-bibliography      : "Power Simulation Manuscript.bib"
+bibliography      : "references.bib"
 
 floatsintext      : yes
 linenumbers       : no
@@ -50,6 +50,28 @@ footnotelist      : no
 
 classoption       : "man"
 output            : papaja::apa6_pdf
+repro:
+  packages:
+    - papaja
+    - tidyverse
+    - ggpubr
+    - SimDesign
+    - here
+  tlmgr:
+    - apa6
+    - threeparttable
+    - endfloat
+    - framed
+    - was
+    - multirow
+    - threeparttablex
+    - environ
+    - trimspaces
+    - xpatch
+    - csquotes
+  scripts:
+    - R/funs.R
+    - "01_run_simulation.R"
 ---
 
 ```{r setup, include = FALSE}
@@ -65,7 +87,19 @@ knitr::opts_chunk$set(echo = FALSE)
 
 builtin_source_hook <- knitr::knit_hooks$get('source')
 knitr::knit_hooks$set(source = function(x, options) {
-  x <- grep("# HIDE$", x, invert = TRUE, value = TRUE)
+  #raw <- x
+  #browser()
+  x <- unlist(stringr::str_split(x, "\n"))
+  ind <- stringr::str_which(x, "# HIDE$")
+  if(length(ind) > 1){
+    first <- ind[1]
+    rest <- ind[-1]
+    x[first] <- "# […]"
+    x <- x[-rest]
+  } else if(length(ind) == 1L){
+    x[ind] <- "# […]"
+  }
+  first <- ind
   if (length(x) > 0) {
     return(builtin_source_hook(x, options))
   } else {
