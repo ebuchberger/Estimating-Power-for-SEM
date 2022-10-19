@@ -10,7 +10,7 @@ manuscript.pdf: manuscript.tex
 publish/: manuscript.pdf
 
 intermediate_results.zip: R/run_simulation.R R/funs.R
-	$(RUN1) Rscript -e "source('$<')" $(RUN2)
+	$(RUN1) Rscript -e \"source('$<')\" $(RUN2)
 
 include .repro/Makefile_publish
 
