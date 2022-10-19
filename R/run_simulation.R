@@ -213,7 +213,7 @@ results_df_cov_model2 <-
 # _______________________ Store results _____________________________________
 fs::dir_create(here("intermediate_results"))
 expand_grid(type = c("cov", "df"), model = 1:3) %>% 
-  mutate(object = str_c("results_", type, "model", model),
+  mutate(object = str_c("results_", type, "_model", model),
          file = here("intermediate_results", str_c(object, ".rds"))) %>% 
-  pwalk(function(object, file, ...)write_rds(get(object), file, compress = "gz"))
+  pwalk(function(object, file, ...)write_rds(get(object), file, compress = "none"))
 zip("intermediate_results.zip", fs::dir_ls(here("intermediate_results")))
