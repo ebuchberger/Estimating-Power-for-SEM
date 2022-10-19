@@ -121,7 +121,7 @@ summarize_results <-
         group_by(rep) %>%
         summarise(
           sim_model = unique(sim_model),
-          best  = if (any(converged == F)) {
+          best  = if (any(converged == FALSE)) {
             0
           } else if (is_empty(bic[admissable])) {
             0
