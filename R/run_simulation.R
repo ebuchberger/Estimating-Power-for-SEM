@@ -10,6 +10,7 @@ library(tidyverse)
 library(here)
 source(here::here("R", "funs.R"))
 set.seed(12345)
+nreplications <- 10
 
 #  _________________________ Step 1: Specify models _________________________
 
@@ -75,7 +76,7 @@ design_load_model3 <- createDesign(
 results_cov_model3 <-
   runSimulation(
     design = design_cov_model3,
-    replications = 10,
+    replications = nreplications,
     generate = generate_data,
     analyse = analyze_results,
 #    summarise = summarize_results,
@@ -97,7 +98,7 @@ results_df_cov_model3 <-
 results_load_model3 <-
   runSimulation(
     design = design_load_model3,
-    replications = 10000,
+    replications = nreplications,
     generate = generate_data,
     analyse = analyze_results,
 #    summarise = summarize_results,
@@ -128,7 +129,7 @@ design_load_model1 <- createDesign(
 results_load_model1 <-
   runSimulation(
     design = design_load_model1,
-    replications = 10000,
+    replications = nreplications,
     generate = generate_data,
     analyse = analyze_results,
 #    summarise = summarize_results,
@@ -159,7 +160,7 @@ design_load_model2 <- createDesign(
 results_load_model2 <-
   runSimulation(
     design = design_load_model2,
-    replications = 10000,
+    replications = nreplications,
     generate = generate_data,
     analyse = analyze_results,
 #    summarise = summarize_results,
@@ -192,7 +193,7 @@ design_cov_model2 <-
 results_cov_model2 <-
   runSimulation(
     design = design_cov_model2,
-    replications = 10000,
+    replications = nreplications,
     generate = generate_data,
     analyse = analyze_results,
 #    summarise = summarize_results,
