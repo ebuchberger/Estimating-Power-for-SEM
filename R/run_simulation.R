@@ -212,8 +212,19 @@ results_df_cov_model2 <-
 
 # _______________________ Store results _____________________________________
 fs::dir_create(here("intermediate_results"))
-expand_grid(type = c("cov", "df"), model = 1:3) %>% 
-  mutate(object = str_c("results_", type, "_model", model),
-         file = here("intermediate_results", str_c(object, ".rds"))) %>% 
-  pwalk(function(object, file, ...)write_rds(get(object), file, compress = "none"))
+
+saveRDS(results_cov_model3, file = here("intermediate_results", "results_cov_model3.rds"))
+saveRDS(results_df_cov_model3, file = here("intermediate_results", "results_df_cov_model3.rds"))
+
+saveRDS(results_load_model3, file = here("intermediate_results", "results_load_model3.rds"))
+saveRDS(results_df_load_model3, file = here("intermediate_results", "results_df_load_model3.rds"))
+
+saveRDS(results_load_model1, file = here("intermediate_results", "results_load_model1.rds"))
+saveRDS(results_df_load_model1, file = here("intermediate_results", "results_df_load_model1.rds"))
+saveRDS(results_load_model2, file = here("intermediate_results", "results_load_model2.rds"))
+saveRDS(results_df_load_model2, file = here("intermediate_results", "results_df_load_model2.rds"))
+saveRDS(results_cov_model2, file = here("intermediate_results", "results_cov_model2.rds"))
+saveRDS(results_df_cov_model2, file = here("intermediate_results", "results_df_cov_model2.rds"))
+
 zip("intermediate_results.zip", fs::dir_ls(here("intermediate_results")))
+fs::dir_delete(here("intermediate_results"))
