@@ -1,6 +1,6 @@
 ### SLURM Options ###
 # see tardis.mpib.berlin.mpg.de/docs
-WALLTIME = 0:05:00
+WALLTIME = 10:00:00
 MEMORY = 3gb
 QUEUE = default
 CORES = 32
