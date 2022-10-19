@@ -53,10 +53,10 @@ design_cov_model3 <-
 design_load_model3 <- createDesign(
   loading_strength = seq(0.5, 0.9, 0.1),
   samplesize       = seq(50, 200, 5),
-  sim_model        = c(3), #HIDE
-  cov1             = 0.3,  #HIDE
-  cov2             = 0.3,  #HIDE
-  cov3             = 0.3   #HIDE
+  sim_model        = c(3), # HIDE
+  cov1             = 0.3,  # HIDE
+  cov2             = 0.3,  # HIDE
+  cov3             = 0.3   # HIDE
 )
 #---- ----
 # _____________________________ Step 3: Generate ____________________________
