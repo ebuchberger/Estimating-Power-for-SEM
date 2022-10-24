@@ -9,7 +9,19 @@ manuscript.pdf: manuscript.tex
 
 publish/: manuscript.pdf
 
-intermediate_results.zip: R/run_simulation.R R/funs.R
+intermediate_results_reliability.zip: R/setup_simulation.R R/run_simulation_reliability.R R/funs.R
+	$(RUN1) Rscript -e \"source('$<')\" $(RUN2)
+
+intermediate_results_separability.zip: R/setup_simulation.R R/run_simulation_separability.R R/funs.R
+	$(RUN1) Rscript -e \"source('$<')\" $(RUN2)
+
+intermediate_results_type1error_1.zip: R/setup_simulation.R R/run_simulation_type1error_1.R R/funs.R
+	$(RUN1) Rscript -e \"source('$<')\" $(RUN2)
+
+intermediate_results_type1error_2.zip: R/setup_simulation.R R/run_simulation_type1error_2.R R/funs.R
+	$(RUN1) Rscript -e \"source('$<')\" $(RUN2)
+
+intermediate_results_type1error_3.zip: R/setup_simulation.R R/run_simulation_type1error_3.R R/funs.R
 	$(RUN1) Rscript -e \"source('$<')\" $(RUN2)
 
 include .repro/Makefile_publish
