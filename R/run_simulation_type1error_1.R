@@ -30,5 +30,6 @@ fs::dir_create(here("intermediate_results"))
 write.csv(results_load_model1, here("intermediate_results", "results_load_model1.csv"))
 write.csv(results_df_load_model1, here("intermediate_results", "results_df_load_model1.csv"))
 
-zipr("intermediate_results_type1error_1.zip", fs::dir_ls(here("intermediate_results")))
+fs::dir_create(here("data"))
+zipr("data/intermediate_results_type1error_1.zip", fs::dir_ls(here("intermediate_results")))
 fs::dir_delete(here("intermediate_results"))
