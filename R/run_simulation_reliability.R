@@ -29,7 +29,3 @@ results_df_load_model3 <-
 fs::dir_create(here("intermediate_results"))
 write.csv(results_load_model3, here("intermediate_results", "results_load_model3.csv"))
 write.csv(results_df_load_model3, here("intermediate_results", "results_df_load_model3.csv"))
-
-fs::dir_create(here("data"))
-zipr("data/intermediate_results_reliability.zip", fs::dir_ls(here("intermediate_results")))
-fs::dir_delete(here("intermediate_results"))

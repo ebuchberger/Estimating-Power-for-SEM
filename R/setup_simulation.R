@@ -8,7 +8,6 @@ library(SimDesign)
 library(lavaan)
 library(tidyverse)
 library(here)
-library(zip)
 source(here::here("R", "funs.R"))
 set.seed(12345)
 nreplications <- 10000
