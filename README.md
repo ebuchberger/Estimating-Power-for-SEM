@@ -24,3 +24,21 @@ Also note that simulations with 10000 iterations as described here take multiple
 The code for recreating the result figures from the manuscript is included in the Rmd file.
 This code loads the result dataframes from the original simulation (5 separate rds result files) 
 and dynamically creates the plots when knitting the document.
+
+## Reproduce
+
+### From intermediate results with Docker
+
+```
+git clone https://github.com/ebuchberger/Estimating-Power-for-SEM.git
+cd Estimating-Power-for-SEM/
+make singularity
+```
+
+### On Tardis/HPC/SLURM with Singularity
+
+```
+git clone https://github.com/ebuchberger/Estimating-Power-for-SEM.git
+cd Estimating-Power-for-SEM/
+make singularity
+```
