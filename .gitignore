@@ -9,3 +9,4 @@ intermediate_results.zip
 *_files/
 *.log
 *.sif
+*.out
