@@ -72,13 +72,8 @@ repro:
     - csquotes
   scripts:
     - R/funs.R
-    - R/run_simulation.R
   files:
-    - intermediate_results_separability.zip
-    - intermediate_results_reliability.zip
-    - intermediate_results_type1error_1.zip
-    - intermediate_results_type1error_2.zip
-    - intermediate_results_type1error_3.zip
+    - intermediate_results.zip
 ---
 
 ```{r setup, include = FALSE}
