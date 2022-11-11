@@ -1,1 +1,0 @@
-zip("intermediate_results.zip", fs::dir_ls(here::here("intermediate_results"))) 
