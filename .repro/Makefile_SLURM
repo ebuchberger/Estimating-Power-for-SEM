@@ -2,7 +2,7 @@
 # see tardis.mpib.berlin.mpg.de/docs
 WALLTIME = 40:00:00
 MEMORY = 60gb
-QUEUE = default
+QUEUE = long
 CORES = 32
 NAME = POWERSEM
 QFLAGS = -q $(QUEUE) --cpus-per-task $(CORES) --time $(WALLTIME) --mem $(MEMORY) --job-name $(NAME)
