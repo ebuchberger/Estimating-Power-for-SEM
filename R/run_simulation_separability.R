@@ -14,6 +14,7 @@ results_cov_model3 <-
     summarise = summarize_results,
     store_results = TRUE,
     parallel = TRUE,
+    ncores = ncores,
     packages = c('SimDesign', 'lavaan', 'tidyverse'),
     fixed_objects = fixed_objects
   )

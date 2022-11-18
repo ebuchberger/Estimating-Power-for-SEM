@@ -10,8 +10,11 @@ library(tidyverse)
 library(here)
 source(here::here("R", "funs.R"))
 set.seed(12345)
-nreplications <- 10000
+REPLICATIONS <- Sys.getenv("REPLICATIONS")
+nreplications <- ifelse(REPLICATIONS == "", 1000, as.numeric(REPLICATIONS))
 
+CORES <- Sys.getenv("CORES")
+ncores <- ifelse(CORES == "", 30, as.numeric(CORES))
 #  _________________________ Step 1: Specify models _________________________
 
 #----model1 ----
