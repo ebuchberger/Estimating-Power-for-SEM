@@ -2,6 +2,9 @@ PROJECT := estimatingpowerforsem
 WORKDIR := $(CURDIR)
 INTERMEDIATE := FALSE
 
+test: R/lavaan.R
+	$(RUN1) Rscript -e $(QUOTE)source('$<')$(QUOTE) $(RUN2)
+
 # list below your targets and their recipies
 all: manuscript.pdf
 
