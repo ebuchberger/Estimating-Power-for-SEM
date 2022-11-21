@@ -72,13 +72,8 @@ repro:
     - csquotes
   scripts:
     - R/funs.R
-    - R/run_simulation.R
   files:
-    - intermediate_results_separability.zip
-    - intermediate_results_reliability.zip
-    - intermediate_results_type1error_1.zip
-    - intermediate_results_type1error_2.zip
-    - intermediate_results_type1error_3.zip
+    - intermediate_results.zip
 ---
 
 ```{r setup, include = FALSE}
@@ -236,11 +231,7 @@ In a second step, we further examined the effect of the construct reliability on
 intermediate_results <- here("intermediate_results/")
 if(fs::dir_exists(intermediate_results))
  fs::dir_delete(intermediate_results)
-unzip(here("data", "intermediate_results_separability.zip"), junkpaths = TRUE, exdir =here("data"))
-unzip(here("data", "intermediate_results_reliability.zip"), junkpaths = TRUE, exdir =here("data"))
-unzip(here("data", "intermediate_results_type1error_1.zip"), junkpaths = TRUE, exdir =here("data"))
-unzip(here("data", "intermediate_results_type1error_2.zip"), junkpaths = TRUE, exdir =here("data"))
-unzip(here("data", "intermediate_results_type1error_3.zip"), junkpaths = TRUE, exdir =here("data"))
+unzip(here::here("intermediate_results.zip"))
 ```
 
 ```{r, echo = FALSE, fig.width=11.3, fig.height=4.3, fig.align = 'center', fig.cap = "Simulation results: Estimated statistical power for recovering the data-generating model, i.e. Model 3 (y-axis) as a function of sample size (x-axis) with varying the factor inter-correlations when the loading strength was fixed to 0.7 (A) $;$ and with varying the loading strength when the factor inter-correlation was fixed to 0.3 (B). For each combination of parameters, 10,000 datasets were simulated. The red dashed horizontal line positioned at 95\\% discovery rate reflects the cut-off for identifying the appropriate sample size. The syntax to generate these plots with ggplot() can be found in the supplementary R Code on GitHub"}
@@ -287,9 +278,9 @@ theme_plots <- theme(
 )
 
 results_load_model3 <- 
-  read.csv(here::here("data", "results_load_model3.csv"))
+  read.csv(here::here("intermediate_results", "results_load_model3.csv"))
 results_cov_model3 <- 
-  read.csv(here::here("data", "results_cov_model3.csv"))
+  read.csv(here::here("intermediate_results", "results_cov_model3.csv"))
 
 plot_cov_model3 <- results_cov_model3 %>%
   ggplot(aes(sample_size, best_3 * 100, colour = factor(cov1))) +
@@ -357,15 +348,15 @@ The main part of this tutorial has focused on estimating statistical power that 
 ```{r, echo = FALSE, fig.align='center', fig.height=8., fig.width=11.3, fig.cap = "Simulation results: Probability to erroneously pick Model 3 as the best fitting model when indeed Model 1 (A1) or Model 2 (A2/B2) generated the data, as a function of total sample size (x-axis) and the loadings strength of the manifest variables (A1/A2) or the strength of the covariance of the latent factors (B2). Note that the y-axis reaches from 0 to 20\\% for the sake of visibility."}
 
 results_load_model1 <-
-  read.csv(here::here("data", "results_load_model1.csv"))
+  read.csv(here::here("intermediate_results", "results_load_model1.csv"))
 results_load_model2 <-
-  read.csv(here::here("data", "results_load_model2.csv"))
+  read.csv(here::here("intermediate_results", "results_load_model2.csv"))
 results_cov_model2  <-
-  read.csv(here::here("data", "results_cov_model2.csv"))
+  read.csv(here::here("intermediate_results", "results_cov_model2.csv"))
 results_load_model3 <-
-  read.csv(here::here("data", "results_load_model3.csv"))
+  read.csv(here::here("intermediate_results", "results_load_model3.csv"))
 results_cov_model3  <- 
-  read.csv(here::here("data", "results_cov_model3.csv"))
+  read.csv(here::here("intermediate_results", "results_cov_model3.csv"))
 
 plot_load_model1 <- results_load_model1 %>%
   ggplot(aes(sample_size, best_3 * 100, colour = factor(loading_strength))) +
