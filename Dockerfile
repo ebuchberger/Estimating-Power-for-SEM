@@ -11,9 +11,12 @@ RUN MRAN=https://mran.microsoft.com/snapshot/${BUILD_DATE} \
   && echo "options(repos = c(CRAN='$MRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
 RUN tlmgr install apa6 threeparttable endfloat framed was multirow threeparttablex environ trimspaces xpatch csquotes
 RUN install2.r --error --skipinstalled \ 
+  gert \ 
   ggpubr \ 
   here \ 
   lavaan \ 
   papaja \ 
   SimDesign \ 
   tidyverse
+RUN installGithub.r \ 
+  aaronpeikert/repro@5a920f7

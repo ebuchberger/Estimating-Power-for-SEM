@@ -28,6 +28,7 @@ affiliation:
 
 authornote: |
   This work was conducted within the project “Lifespan Rhythms of Memory and Cognition (RHYME)” at the Max Planck Institute for Human Development. ESB is a fellow of the International Max Planck Research School on the Life Course (LIFE; http://www.imprs-life.mpg.de/en). AP is a fellow of the International Max Planck Research School on Computational Methods in Psychiatry and Ageing Research (COMP2PSYCH, https://www.mps-ucl-centre.mpg.de/comp2psych). MW-B received support from the Jacobs Foundation (Early Career Research Fellowship 2017–2019). CTN’s work is supported by a grant from the German Research Foundation (DFG; NG 191/2-1) and an Early Career Research Fellowship by the Jacobs Foundation (2021-1417-99). We are grateful to all members of the RHYME and LIME projects for valuable feedback on the project. Finally, we acknowledge support by the Max Planck Dahlem Campus of Cognition (MPDCC).
+  The latest supplementary materials for this article are availible at <https://github.com/ebuchberger/Estimating-Power-for-SEM>. The version of code and data used as the basis for this PDF is "`r paste0(repro::current_hash(backend = 'gert'))`".
 
 abstract: |
   Determining the compositional structure and dimensionality of psychological constructs lies at the heart of many research questions in developmental science. Structural equation modelling (SEM) provides a versatile framework for formalizing and estimating the relationships among multiple latent constructs. While the flexibility of SEM can accommodate many complex assumptions on the underlying structure of psychological constructs, it makes a-priori estimation of statistical power and required sample size challenging. This difficulty is magnified when comparing non-nested SEMs, which prevents the use of the likelihood-ratio test. Sample size estimates for SEM model fit comparisons typically rely on generic rules of thumb. Such heuristics can be misleading because statistical power in SEM depends on a variety of model properties. Here, we demonstrate a Monte Carlo simulation approach for estimating a-priori statistical power for non-nested model comparisons in an SEM framework. We provide a step-by-step guide to this approach based on an example from our memory development research in children.
@@ -58,6 +59,8 @@ repro:
     - ggpubr
     - SimDesign
     - here
+    - aaronpeikert/repro@5a920f7
+    - gert
   tlmgr:
     - apa6
     - threeparttable
