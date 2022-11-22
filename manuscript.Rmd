@@ -72,7 +72,6 @@ repro:
     - csquotes
   scripts:
     - R/funs.R
-    - "01_run_simulation.R"
 ---
 
 ```{r setup, include = FALSE}
@@ -83,7 +82,8 @@ library(here)
 library(SimDesign)
 
 knitr::read_chunk(here::here("R", "funs.R"))
-knitr::read_chunk(here::here("01_run_simulation.R"))
+knitr::read_chunk(here::here("R", "setup_simulation.R"))
+knitr::read_chunk(here::here("R", "run_simulation_separability.R"))
 knitr::opts_chunk$set(echo = FALSE)
 
 builtin_source_hook <- knitr::knit_hooks$get('source')
@@ -225,6 +225,18 @@ As expected, statistical power increased with increasing sample size. However, t
 
 In a second step, we further examined the effect of the construct reliability on statistical power by investigating the loading strength of the manifest variables. To this end we conducted a second simulation following the steps outlined above while varying the sample size from 50 to 200 and the loadings of the manifest variables from 0.5 to 0.9. Figure 3B displays the obtained power curves, illustrating statistical power dependent on total sample size and loading strength of the manifest variables. For this estimate, the factor inter-correlation was set to 0.3. Again, increasing sample size lead to higher statistical power. However, the loading strength impacted estimates of statistical power: the higher the loadings of the manifest variables, the higher the statistical power achieved by a given sample size. For reasonably high levels of factor loadings (>= 0.7) a statistical power of 95% was reached for *N* = 120. 
 
+```{r}
+intermediate_results <- here("intermediate_results.zip")
+# manuscript is created from intermediate_files with two fallbacks:
+# 1. if a intermediate_files.zip exists it is unpacked
+# 2. if nothing exists, the zip is downloaded
+if(!fs::dir_exists(fs::path_ext_remove(intermediate_results))){
+  if(!fs::file_exists(intermediate_results))
+    download.file("https://keeper.mpdl.mpg.de/f/d6526b78178c4b4199e9/?dl=1", intermediate_results)
+  unzip(intermediate_results)
+}
+```
+
 ```{r, echo = FALSE, fig.width=11.3, fig.height=4.3, fig.align = 'center', fig.cap = "Simulation results: Estimated statistical power for recovering the data-generating model, i.e. Model 3 (y-axis) as a function of sample size (x-axis) with varying the factor inter-correlations when the loading strength was fixed to 0.7 (A) $;$ and with varying the loading strength when the factor inter-correlation was fixed to 0.3 (B). For each combination of parameters, 10,000 datasets were simulated. The red dashed horizontal line positioned at 95\\% discovery rate reflects the cut-off for identifying the appropriate sample size. The syntax to generate these plots with ggplot() can be found in the supplementary R Code on GitHub"}
 
 theme_plots <- theme(
@@ -268,12 +280,13 @@ theme_plots <- theme(
   legend.position  = "right"
 )
 
-results_load_model3 <-
-  readRDS(here::here("results_load_model3.rds"))
-results_cov_model3  <- readRDS(here::here("results_cov_model3.rds"))
+results_load_model3 <- 
+  read.csv(here::here("intermediate_results", "results_load_model3.csv"))
+results_cov_model3 <- 
+  read.csv(here::here("intermediate_results", "results_cov_model3.csv"))
 
 plot_cov_model3 <- results_cov_model3 %>%
-  ggplot(aes(samplesize, best_3 * 100, colour = factor(cov1))) +
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(cov1))) +
   geom_point() +
   geom_line(alpha = 0.4,
             size = 1.3,
@@ -299,7 +312,7 @@ plot_cov_model3 <- results_cov_model3 %>%
   theme_plots
 
 plot_load_model3 <- results_load_model3 %>%
-  ggplot(aes(samplesize, best_3 * 100, colour = factor(loading_strength))) +
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(loading_strength))) +
   geom_point() +
   geom_line(alpha = 0.4,
             size = 1.3,
@@ -338,16 +351,18 @@ The main part of this tutorial has focused on estimating statistical power that 
 ```{r, echo = FALSE, fig.align='center', fig.height=8., fig.width=11.3, fig.cap = "Simulation results: Probability to erroneously pick Model 3 as the best fitting model when indeed Model 1 (A1) or Model 2 (A2/B2) generated the data, as a function of total sample size (x-axis) and the loadings strength of the manifest variables (A1/A2) or the strength of the covariance of the latent factors (B2). Note that the y-axis reaches from 0 to 20\\% for the sake of visibility."}
 
 results_load_model1 <-
-  readRDS(here::here("results_load_model1.rds"))
+  read.csv(here::here("intermediate_results", "results_load_model1.csv"))
 results_load_model2 <-
-  readRDS(here::here("results_load_model2.rds"))
-results_cov_model2  <- readRDS(here::here("results_cov_model2.rds"))
+  read.csv(here::here("intermediate_results", "results_load_model2.csv"))
+results_cov_model2  <-
+  read.csv(here::here("intermediate_results", "results_cov_model2.csv"))
 results_load_model3 <-
-  readRDS(here::here("results_load_model3.rds"))
-results_cov_model3  <- readRDS(here::here("results_cov_model3.rds"))
+  read.csv(here::here("intermediate_results", "results_load_model3.csv"))
+results_cov_model3  <- 
+  read.csv(here::here("intermediate_results", "results_cov_model3.csv"))
 
 plot_load_model1 <- results_load_model1 %>%
-  ggplot(aes(samplesize, best_3 * 100, colour = factor(loading_strength))) +
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(loading_strength))) +
   geom_point() +
   geom_line(alpha = 0.4,
             size = 1.3,
@@ -367,7 +382,7 @@ plot_load_model1 <- results_load_model1 %>%
   theme_plots
 
 plot_load_model2 <- results_load_model2  %>%
-  ggplot(aes(samplesize, best_3 * 100, colour = factor(loading_strength))) +
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(loading_strength))) +
   geom_point() +
   geom_line(alpha = 0.4,
             size = 1.3,
@@ -386,7 +401,7 @@ plot_load_model2 <- results_load_model2  %>%
   ) +
   theme_plots
 plot_cov_model2 <- results_cov_model2 %>%
-  ggplot(aes(samplesize, best_3 * 100, colour = factor(cov1))) +
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(cov1))) +
   geom_point() +
   geom_line(alpha = 0.4,
             size = 1.3,
