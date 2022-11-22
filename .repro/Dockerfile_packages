@@ -1,7 +1,10 @@
 RUN install2.r --error --skipinstalled \ 
+  gert \ 
   ggpubr \ 
   here \ 
   lavaan \ 
   papaja \ 
   SimDesign \ 
   tidyverse
+RUN installGithub.r \ 
+  aaronpeikert/repro@5a920f7
