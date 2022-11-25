@@ -357,6 +357,11 @@ display: none;
 </div>
 
 
+<pre class="r"><code>met &lt;- function(x, ...){
+  sessioninfo:::print.session_info(x, ..)
+  cat(&quot;\n\U0009&quot;)
+}
+.S3method(&quot;print&quot;, &quot;session_info&quot;, met)</code></pre>
 <pre class="r"><code>session_info()</code></pre>
 <pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value
@@ -469,7 +474,9 @@ display: none;
 ##  [1] /usr/local/lib/R/site-library
 ##  [2] /usr/local/lib/R/library
 ## 
-## ──────────────────────────────────────────────────────────────────────────────</code></pre>
+## ──────────────────────────────────────────────────────────────────────────────
+## 
+##  </code></pre>
 
 
 
