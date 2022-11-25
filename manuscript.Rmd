@@ -248,7 +248,7 @@ theme_plots <- theme(
   legend.key       = element_rect(fill = NA),
   axis.line        = element_line(
     colour = "black",
-    size = 0.5,
+    linewidth = 0.5,
     linetype = "solid"
   ),
   axis.text.x      = element_text(
@@ -292,13 +292,13 @@ plot_cov_model3 <- results_cov_model3 %>%
   ggplot(aes(sample_size, best_3 * 100, colour = factor(cov1))) +
   geom_point() +
   geom_line(alpha = 0.4,
-            size = 1.3,
+            linewidth = 1.3,
             key_glyph = "rect") +
   geom_hline(
     yintercept = 95,
     linetype = "dashed",
     color = "#F29090",
-    size = 1.3
+    linewidth = 1.3
   ) +
   xlab('Sample size') + ylab('Power (%)') + ggtitle('A \n') +
   scale_color_discrete('Inter-factor \ncorrelation') +
@@ -318,13 +318,13 @@ plot_load_model3 <- results_load_model3 %>%
   ggplot(aes(sample_size, best_3 * 100, colour = factor(loading_strength))) +
   geom_point() +
   geom_line(alpha = 0.4,
-            size = 1.3,
+            linewidth = 1.3,
             key_glyph = "rect") +
   geom_hline(
     yintercept = 95,
     linetype = "dashed",
     color = "#F29090",
-    size = 1.3
+    linewidth = 1.3
   ) +
   xlab('Sample size') + ylab('Power (%)') + ggtitle('B \n') +
   scale_color_discrete('loading       \nstrength') +
@@ -448,7 +448,7 @@ SEM offers a powerful tool for modeling multivariate relationships between psych
 
 The results from our illustration highlight the importance of two model parameters: the separability of the theoretical models on the basis of factor inter-correlation, and the reliability with which the construct can be measured on the basis of the loading strength of the manifest variables. These results align with theoretical knowledge on SEM [@wolf_2013], but they provide additional insights on the tangible impact of these parameters on statistical power estimation in the specific research design discussed here and in other SEMs more broadly. 
 
-First, we showed that detecting differences in model fit requires increasingly many participants the higher the inter-correlation of the factors turns out practically. Therefore, it is warranted to consider the actual separability of the constructs in question to avoid underpowered sampling plans. We acknowledge that committing to specific parameter values, such as factor inter-correlations, can be difficult when setting up the population models for the simulations. Thus, we recommend researchers to consult existing literature in order to make informed assumptions on the relationship among different latent factors. For cases in which no or little evidence exists on the relationship between the constructs under investigation, we recommend to enter these inter-correlations into the simulation as parameter of interest (as demonstrated in the example of this paper) and to then carefully evaluate what level of resolution is required when separating inter-related factors depending on practical relevance. 
+First, we showed that detecting differences in model fit requires increasingly many participants the higher the inter-correlation of the factors turns out practically. Therefore, it is warranted to consider the actual separability of the constructs in question to avoid underpowered sampling plans. We acknowledge that committing to specific parameter values, such as factor inter-correlations, can be difficult when setting up the population models for the simulations. Thus, we recommend researchers to consult existing literature in order to make informed assumptions on the relationship among different latent factors. For cases in which no or little evidence exists on the relationship between the constructs under investigation, we recommend to enter these inter-correlations into the simulation as parameter of interest (as demonstrated in the example of this paper) and to then carefully evaluate what level of resolution is required when separating inter-related factors depending on practical relevance.
 
 Second, the results on the loadings of manifest variables stresses the importance of employing indicators that capture the latent construct with high reliability [@zuo_2019]. Considering the issue of reliability is a crucial step in experimental design, as the reliability of the indicators heavily influences the practical ability to identify the targeted latent construct with sufficient precision and differentiate between competing models. Again, committing to population values can be difficult, especially if there is no prior work from which to draw values. In this case, we still advice to estimate plausible values from related scientific areas. For instance, selecting factor loading strength in the tri-partite model is not straightforward. However, we can do a literature search on similar models and take the reported test- reliability (e.g., a test-retest) or construct reliability (e.g., coefficient alpha) and translate this back into factor loadings strength and residual loadings [see @brandmaier_2018 for examples on how to parametrize longitudinal models from minimal available information]. If information about test reliability is available, we set the loadings to the square-root of the reliability to take this prior information into account. Then, this yields the following construct reliability for our design (assuming identical loadings across *k* items):
 
@@ -464,7 +464,7 @@ If instead, prior knowledge about construct reliability exists and this reliabil
 
 For example, taking from a literature search that the construct reliability of the construct of interest (reported as Cronbach’s alpha) was 0.7 and the estimate was based on *k*=4 tests, we set our loadings to $\lambda$ = 0.61 (using Eq.2).  If a study reported a test-retest correlation of a single test to be *r*=0.8, then we set the factor loading to $\lambda = \sqrt{0.8} = 0.64$. If in doubt, we suggest to use conservative values rather than too liberal values to avoid underpowered studies. 
 
-While we demonstrate in this tutorial that simulation-based techniques help overcome methodological shortcomings from traditional analytical approaches, the randomness that is inherent to such approaches may seem at odds with efforts in results reproducibility and replicability. Here, a clear-cut solution is through transparent and accessible documentation of the simulation code and adequate software management. That is, researchers should make use of repositories on platforms such as GitHub or the Open Science Framework to make code scripts available to other researchers, and clearly specify the versions of software programs and packages that were used (e.g. via containerization or at least in written form). We thus urge researchers to seriously consider the issue of reproducibility for their simulation analyses, to make outcomes of such a-priori power estimates easily accessible to other researchers and reviewers [for a more detailed guideline on a reproducible workflow in R see @peikert_2021 or the implementation of this manuscript on GitHub].
+While we demonstrate in this tutorial that simulation-based techniques help overcome methodological shortcomings from traditional analytical approaches, the randomness that is inherent to such approaches may seem at odds with efforts in results reproducibility and replicability. Here, a clear-cut solution is through transparent and accessible documentation of the simulation code and adequate software management. That is, researchers should make use of repositories on platforms such as GitHub or the Open Science Framework to make code scripts available to other researchers, and clearly specify the versions of software programs and packages that were used (e.g. via containerization or at least in written form). We thus urge researchers to seriously consider the issue of reproducibility for their simulation analyses, to make outcomes of such a-priori power estimates easily accessible to other researchers and reviewers [for a more detailed guideline on a reproducible workflow in R see @peikert_2021 and the implementation of this manuscript on GitHub as an example]. Note, however, that (specifically in cases when simulations are parallelized on computing clusters) the exact replicability of simulations as demonstrated in this tutorial might be compromised, even when a seed is specified in the analysis script. Nevertheless, a sufficiently high number of iterations should result in equivalent estimates of statistical power and thus the derived conclusions about required sample size will remain unaffected. 
 
 In sum, we argue that sample size planning in the case of non-nested SEM comparisons requires a simulation-based approach. In particular, we highlighted that the separability of theoretical constructs, as well as the reliability of the measures, have a major impact on estimates of statistical power. To this end we hope that this tutorial advances the use of simulation-based approaches to estimating statistical power in cases where analytical approaches do not suffice. 
 
