@@ -1,3 +1,6 @@
 manuscript.tex: manuscript.Rmd R/funs.R references.bib
 	$(RUN1) Rscript -e 'rmarkdown::render("$(WORKDIR)/$<", "all")' $(RUN2)
 
+packages.html: packages.Rmd
+	$(RUN1) Rscript -e 'rmarkdown::render("$(WORKDIR)/$<", "all")' $(RUN2)
+
