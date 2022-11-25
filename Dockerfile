@@ -16,6 +16,7 @@ RUN install2.r --error --skipinstalled \
   here \ 
   lavaan \ 
   papaja \ 
+  sessioninfo \ 
   SimDesign \ 
   tidyverse
 RUN installGithub.r \ 
