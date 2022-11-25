@@ -13,7 +13,7 @@ library(purrr)
 walk(repro:::yamls_packages(), function(x)safely(library)(x, character.only = TRUE))
 ```
 
-```{r}
+```{r, include=FALSE}
 met <- function(x, ...){
   sessioninfo:::print.session_info(x, ..)
   cat("\n\U0009")
@@ -21,6 +21,6 @@ met <- function(x, ...){
 .S3method("print", "session_info", met)
 ```
 
-```{r}
+```{r, comment=""}
 session_info()
 ```
