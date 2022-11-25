@@ -14,5 +14,5 @@ walk(repro:::yamls_packages(), function(x)safely(library)(x, character.only = TR
 ```
 
 ```{r}
-package_info()
+session_info()
 ```
