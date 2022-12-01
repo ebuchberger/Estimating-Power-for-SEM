@@ -3,9 +3,7 @@
 This repository contains the materials for a tutorial on conducting simulation-based power analyses in R.  
 (R Code for running the simulations described in Buchberger et al.)  
 
-Preprint available here: https://ebuchberger.github.io/Estimating-Power-for-SEM/manuscript.pdf
-
-The code was written using the following software versions:https://ebuchberger.github.io/Estimating-Power-for-SEM/packages
+[🗎 Preprint available 🗎](https://ebuchberger.github.io/Estimating-Power-for-SEM/manuscript.pdf)
 
 ## Reproduce
 
