@@ -57,13 +57,13 @@ generate_data <- function(condition, fixed_objects = NULL) {
     condition <- mutate(condition, a = loading_strength, b = a / sqrt(2 + 2 * cov1))
     tasks <- str_c("task", 1:13)
     error_vars <- glue::glue_collapse(
-      glue::glue_data(condition, "{tasks} ~~ {a / sqrt(2 + 2 * cov1)}*task1"),
+      glue::glue_data(condition, "{tasks} ~~ {1 - a ^ 2}*task1"),
       "\n")
     pop_model <- glue::glue_data(condition, 
     "
-s   =~ {a}*task1  + {a}*task2  +{a}*task3  +{a}*task4 +{b}*task5 + {b}*task6
-pc  =~ {b}*task5  + {b}*task6  +{a}*task7  +{a}*task8 +{a}*task9
-gen =~ {a}*task10 + {a}*task11 +{a}*task12 +{a}*task13
+s   =~ {a}*task1  + {a}*task2  +{a}*task3  + {a}*task4 + {b}*task5 + {b}*task6
+pc  =~ {b}*task5  + {b}*task6  +{a}*task7  + {a}*task8 + {a}*task9
+gen =~ {a}*task10 + {a}*task11 +{a}*task12 + {a}*task13
 
 {error_vars}
 
