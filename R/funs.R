@@ -54,39 +54,23 @@ generate_data <- function(condition, fixed_objects = NULL) {
       )                                                                # HIDE
                                                                        # HIDE
   } else if (condition$sim_model == 3) {                               # HIDE
-    b <- a / sqrt(2 + 2 * condition$cov1)
-    pop_model <-
-      paste0(
-        "ps =~" ,
-        paste0(a, "*task", 1:4  , collapse = "+"),
-        "+",
-        b,
-        "*task5 +",
-        b,
-        "*task6;",
-        "pc =~",
-        b,
-        "*task5 +",
-        b,
-        "*task6 +",
-        paste0(a, "*task", 7:9 , collapse = "+"),
-        ";",
-        "gen=~",
-        paste0(a, "*task", 10:13 , collapse = "+"),
-        ";",
-        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" ,
-               collapse = ""),
-        "ps ~~",
-        condition$cov1,
-        "*pc;",
-        "ps ~~",
-        condition$cov2,
-        "*gen;",
-        "pc ~~",
-        condition$cov3,
-        "*gen"
-      )
-  }                                                                    # HIDE
+    condition <- mutate(condition, a = loading_strength, b = a / sqrt(2 + 2 * cov1))
+    tasks <- str_c("task", 1:13)
+    error_vars <- glue::glue_collapse(
+      glue::glue_data(condition, "{tasks} ~~ {a / sqrt(2 + 2 * cov1)}*task1"),
+      "\n")
+    pop_model <- glue::glue_data(condition, 
+    "
+s   =~ {a}*task1  + {a}*task2  +{a}*task3  +{a}*task4 +{b}*task5 + {b}*task6
+pc  =~ {b}*task5  + {b}*task6  +{a}*task7  +{a}*task8 +{a}*task9
+gen =~ {a}*task10 + {a}*task11 +{a}*task12 +{a}*task13
+
+{error_vars}
+
+ps ~~ {cov1}*pc
+ps ~~ {cov2}*gen
+pc ~~ {cov3}*gen
+")                                                                  # HIDE
   dat <-
     data.frame(simulateData(pop_model, sample.nobs = condition$sample_size))
 }
