@@ -26,70 +26,40 @@ get_fitmeasures <-
 # _______________ 2. Main functions for the simulation ______________________
 
 #----generate----
-generate_data <- function(condition, fixed_objects = NULL) {
-  a <- condition$loading_strength
-  if (condition$sim_model == 1) {                                       # HIDE
-    pop_model <-                                                       # HIDE
-      paste0(                                                          # HIDE
-        paste0("mem =~", paste0(a, "*task", 1:13 , collapse = "+")),   # HIDE
-        ";",                                                           # HIDE
-        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" , # HIDE
-               collapse = "")                                          # HIDE
-      )                                                                # HIDE
-                                                                       # HIDE
-  } else if (condition$sim_model == 2) {                               # HIDE
-    pop_model <-                                                       # HIDE
-      paste0(                                                          # HIDE
-        "em =~" ,                                                      # HIDE
-        paste0(a, "*task", 1:10  , collapse = "+"),                    # HIDE
-        ";",                                                           # HIDE
-        "sem =~",                                                      # HIDE
-        paste0(a, "*task", 11:13 , collapse = "+"),                    # HIDE
-        ";",                                                           # HIDE
-        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" , # HIDE
-               collapse = ""),                                         # HIDE
-        "em ~~",                                                       # HIDE
-        condition$cov1,                                                # HIDE
-        "*sem"                                                         # HIDE
-      )                                                                # HIDE
-                                                                       # HIDE
-  } else if (condition$sim_model == 3) {                               # HIDE
-    b <- a / sqrt(2 + 2 * condition$cov1)
-    pop_model <-
-      paste0(
-        "ps =~" ,
-        paste0(a, "*task", 1:4  , collapse = "+"),
-        "+",
-        b,
-        "*task5 +",
-        b,
-        "*task6;",
-        "pc =~",
-        b,
-        "*task5 +",
-        b,
-        "*task6 +",
-        paste0(a, "*task", 7:9 , collapse = "+"),
-        ";",
-        "gen=~",
-        paste0(a, "*task", 10:13 , collapse = "+"),
-        ";",
-        paste0("task", 1:13, " ~~ ", 1 - a ^ 2 , " *task", 1:13, ";" ,
-               collapse = ""),
-        "ps ~~",
-        condition$cov1,
-        "*pc;",
-        "ps ~~",
-        condition$cov2,
-        "*gen;",
-        "pc ~~",
-        condition$cov3,
-        "*gen"
-      )
-  }                                                                    # HIDE
-  dat <-
-    data.frame(simulateData(pop_model, sample.nobs = condition$sample_size))
-}
+generate_data <- function(condition, fixed_objects = fixed_objects) {
+  parameters <- list(a = condition$loading_strength
+                     )                                                          # HIDE
+  if (condition$sim_model == 3) {                                               # HIDE
+    parameters <- c(parameters,                                                 # HIDE
+                     b = condition$loading_strength / sqrt(2 + 2 * condition$cov1))
+  }                                                                             # HIDE
+  tasks <- str_c("task", 1:13)
+  error_vars <- glue::glue_collapse(
+    glue::glue_data(parameters, "{tasks} ~~ {1 - a ^2} * {tasks}"),"\n")
+  if (condition$sim_model == 1) {                                               # HIDE
+    pop_model <- glue::glue_data(parameters,                                    # HIDE
+                    "mem  =~ {a}*task1 + {a}*task2 + {a}*task3 + {a}*task4 + {a}*task5 + {a}*task6 + {a}*task7 + {a}*task8 + {a}*task9 + {a}*task10 + {a}*task11 + {a}*task12 + {a}*task13 # HIDE
+                    {error_vars}"                                               # HIDE
+                    )                                                           # HIDE
+  } else if (condition$sim_model == 2) {                                        # HIDE
+    pop_model <- glue::glue_data(parameters,                                    # HIDE
+                    "em  =~ {a}*task1 + {a}*task2 + {a}*task3 + {a}*task4 + {a}*task5 + {a}*task6 + {a}*task7 + {a}*task8 + {a}*task9 # HIDE
+                    sem =~ {a}*task10+ {a}*task11+ {a}*task12+ {a}*task13       # HIDE
+                    {error_vars}                                                # HIDE
+                    em ~~ {condition$cov1}*sem"                                 # HIDE
+                    )                                                           # HIDE
+  } else if (condition$sim_model == 3) {                                        # HIDE
+  pop_model <- glue::glue_data(parameters,
+   "ps  =~ {a}*task1 + {a}*task2 + {a}*task3 + {a}*task4 + {b}*task5 + {b}*task6\n 
+    pc  =~ {b}*task5 + {b}*task6 + {a}*task7 + {a}*task8 + {a}*task9\n
+    gen =~ {a}*task10+ {a}*task11+ {a}*task12+ {a}*task13\n
+    {error_vars}
+    ps ~~ {condition$cov1}*pc\n
+    ps ~~ {condition$cov2}*gen\n
+    pc ~~ {condition$cov3}*gen")
+  }                                                                             # HIDE
+  dat <- data.frame(simulateData(pop_model, sample.nobs = condition$sample_size))
+}                                                                               # HIDE
 
 #----analyze----
 analyze_results <-
