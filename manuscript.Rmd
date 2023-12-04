@@ -53,6 +53,8 @@ footnotelist      : no
 
 classoption       : "man"
 output            : papaja::apa6_pdf
+appendix          : "Appendix.Rmd"
+
 repro:
   packages:
     - lavaan
@@ -241,7 +243,7 @@ if(!fs::dir_exists(fs::path_ext_remove(intermediate_results))){
 }
 ```
 
-```{r, echo = FALSE, fig.width=11.3, fig.height=4.3, fig.align = 'center', fig.cap = "Simulation results: Estimated statistical power for recovering the data-generating model, i.e. Model 3 (y-axis) as a function of sample size (x-axis) with varying the factor inter-correlations when the loading strength was fixed to 0.7 (A) $;$ and with varying the loading strength when the factor inter-correlation was fixed to 0.3 (B). For each combination of parameters, 1,000 datasets were simulated. The red dashed horizontal line positioned at 95\\% discovery rate reflects the cut-off for identifying the appropriate sample size. The syntax to generate these plots with ggplot() can be found in the supplementary R Code on GitHub"}
+```{r, echo = FALSE, fig.width=11.3, fig.height=4.3, fig.align = 'center', fig.cap = "Simulation results: Estimated statistical power for recovering the data-generating model, i.e. Model 3 (y-axis) as a function of sample size (x-axis) with varying the factor inter-correlations when the loading strength was fixed to 0.7 (A) $;$ and with varying the loading strength when the factor inter-correlation was fixed to 0.3 (B). For each combination of parameters, 1,000 datasets were simulated. The red dashed horizontal line positioned at 95\\% discovery rate reflects the cut-off for identifying the appropriate sample size. The syntax to generate these plots with ggplot() can be found in the supplementary R Code on GitHub."}
 
 theme_plots <- theme(
   panel.background = element_blank(),
@@ -328,7 +330,7 @@ plot_load_model3 <- results_load_model3 %>%
     linewidth = 1.3
   ) +
   xlab('Sample size') + ylab('Power (%)') + ggtitle('B \n') +
-  scale_color_discrete('loading       \nstrength') +
+  scale_color_discrete('Loading       \nstrength') +
   scale_x_continuous(
     expand = c(0, 0),
     limits = c(50, 200),
@@ -372,7 +374,7 @@ plot_load_model1 <- results_load_model1 %>%
             linewidth = 1.3,
             key_glyph = "rect") +
   xlab('Sample size') + ylab('Error Rate (%)') + ggtitle('A1 \n') +
-  scale_color_discrete('loading    \nstrength') +
+  scale_color_discrete('Loading    \nstrength') +
   scale_x_continuous(
     expand = c(0, 0),
     limits = c(50, 200),
@@ -392,7 +394,7 @@ plot_load_model2 <- results_load_model2  %>%
             linewidth = 1.3,
             key_glyph = "rect") +
   xlab('Sample size') + ylab('Error Rate (%)') + ggtitle('A2 \n') +
-  scale_color_discrete('loading \nstrength') +
+  scale_color_discrete('Loading \nstrength') +
   scale_x_continuous(
     expand = c(0, 0),
     limits = c(50, 200),
@@ -411,7 +413,7 @@ plot_cov_model2 <- results_cov_model2 %>%
             linewidth = 1.3,
             key_glyph = "rect") +
   xlab('Sample size') + ylab('Error Rate (%)') + ggtitle('B2 \n') +
-  scale_color_discrete('inter-factor \ncovariance') +
+  scale_color_discrete('Inter-factor \ncorrelation') +
   scale_x_continuous(
     expand = c(0, 0),
     limits = c(50, 200),
@@ -464,7 +466,7 @@ If instead, prior knowledge about construct reliability exists and this reliabil
 
 For example, taking from a literature search that the construct reliability of the construct of interest (reported as Cronbach’s alpha) was 0.7 and the estimate was based on *k*=4 tests, we set our loadings to $\lambda$ = 0.61 (using Eq.2).  If a study reported a test-retest correlation of a single test to be *r*=0.8, then we set the factor loading to $\lambda = \sqrt{0.8} = 0.64$. If in doubt, we suggest to use conservative values rather than too liberal values to avoid underpowered studies. 
 
-Note that in this tutorial, we limited our analyses to investigating the impact of either the separability of the theoretical constructs or the impact of the reliability of the estimates by keeping the other parameter constant throughout the simulation. The interaction of these parameters may differentially impact the resultant sample size estimates. However, a thorough investigation of the interaction of the two influencing factors would exponentially increase the number of conditions in a simulation. In our example on memory component processes we therefore confined our simulation to separate analyses in the interest of conciseness. For interested readers, two additional analyses on a) the effect of loading strength on estimates of power for higher levels of inter-factor correlation (0.7 as opposed to 0.3 in the original simulation) and b) the effect of inter-factor correlation on estimates of power for lower levels of factor-loadings (0.5 as opposed to 0.7 in the original simulation) can be found as supplementary material on the github repository. Given that previous work on memory development supports the assumption of reasonably high factor loadings and moderate inter-factor correlation in the present example, these additional analyses leave our conclusions unchanged. 
+Note that in this tutorial, we limited our analyses to investigating the impact of either the separability of the theoretical constructs or the impact of the reliability of the estimates by keeping the other parameter constant throughout the simulation. The interaction of these parameters may differentially impact the resultant sample size estimates. However, a thorough investigation of the interaction of the two influencing factors would exponentially increase the number of conditions in a simulation. In our example on memory component processes we therefore confined our simulation to separate analyses in the interest of conciseness. For interested readers, two additional analyses on a) the effect of loading strength on estimates of power for higher levels of inter-factor correlation (0.7 as opposed to 0.3 in the original simulation) and b) the effect of inter-factor correlation on estimates of power for lower levels of factor-loadings (0.5 as opposed to 0.7 in the original simulation) can be found in the appendix of this manuscript. Given that previous work on memory development supports the assumption of reasonably high factor loadings and moderate inter-factor correlation in the present example, these additional analyses leave our conclusions unchanged. 
 
 Further, we have presented an approach that leverages a combination of absolute and relative model fit parameters to adjudicate between competing models. While such parameter-based decisions are well established in the field, they may result in choosing one model over the other, even in cases when differences in model fit parameters are very small, as one can never conclude that two models fit equally well or that there is too little data to make a decision with enough confidence. An alternative approach to this criterion for model selection originates from a theory by @vuong_1989, who suggested likelihood ratio tests for non-nested models. Recent advances that build on this idea have postulated a framework that allows to test hypotheses of model distinguishability and difference in fit [ @levy_2007; @levy_2011], which can be applied to non-nested SEMs and easily implemented via new software packages in R [ nonnest2, @merkle_2016]. The resulting recommendations for the comparison of non-nested SEMs posit a stepwise procedure to test whether competing non-nested models are distinguishable in a given population and, if yes, whether one fits the data significantly better than the other. Importantly, this method derives interval estimates for differences in non-nested information criteria [ @merkle_2016 ]. Thus, this approach does not only allow to conclude that one or the other model fits the data better, but also allows for the possibility to conclude that there is insufficient evidence to determine which of two models fits a given dataset better. This stepwise procedure can be implemented as a model selection criterion in a power simulation like the one presented above. To integrate model selection via a likelihood ratio test for non-nested models into the current simulation, one would need to adapt the summarize function accordingly, such that it identifies model 3 as the best fitting model only if a) the competing models are distinguishable on the simulated data set of a given iteration, b) the Likelihood ratio test for non-nested models indicates in a significantly better fit for model 3 compared to models 1 and 2 and c) model 3 reaches the cutoffs for absolute model fit, as defined in the previous simulation. The vuongtest() function from the nonnest2 package [@merkle_2014] can be a helpful tool for integrating these tests into the simulation. While a systematic investigation of the interplay of indicator reliability, separability of latent factors and statistical power for model selection via model fit parameters versus the LRT for non-nested models is beyond the scope of this tutorial, it is worth noting that such an alternative approach may yield better model recovery in certain cases. The conditions under which model selection via the LRT for non-nested models provides better estimates of statistical power are thus an interesting avenue for future research.
 
@@ -482,3 +484,12 @@ In sum, we argue that sample size planning in the case of non-nested SEM compari
 
 ::: {#refs custom-style="Bibliography"}
 :::
+
+
+\newpage
+
+# (APPENDIX) Appendix {-}
+
+```{r child = "Appendix.Rmd"}
+```
+

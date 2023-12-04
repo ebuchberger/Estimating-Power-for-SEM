@@ -1,0 +1,179 @@
+# 1. Interaction effects of inter-factor correlation and factor loadings 
+```{r}
+appendix_results <- here::here("appendix_results.zip")
+if(!fs::dir_exists(fs::path_ext_remove(appendix_results))){
+  if(!fs::file_exists(appendix_results))
+    download.file("https://keeper.mpdl.mpg.de/f/7cee7f676c0d4a0a8b80/?dl=1", appendix_results, mode = "wb")
+  unzip(appendix_results, exdir=here::here("appendix_results"))
+}
+```
+
+```{r echo = FALSE, message = FALSE, fig.width=11.3, fig.height=8.6, fig.align = 'center',fig.cap = "Estimated statistical power for recovering the data-generating model (y-axis) as a function of sample size (x-axis) depending on (A) loading strength for lower versus higher inter-factor correlation and (B) inter-factor correlation for lower versus higher factor loadings. * denotes results from the original analyses in the main manuscript"}
+
+theme_plots <- theme(
+  panel.background = element_blank(),
+  panel.grid.major = element_line(color = "grey95"),
+  legend.key       = element_rect(fill = NA),
+  axis.line        = element_line(
+    colour = "black",
+    linewidth = 0.5,
+    linetype = "solid"
+  ),
+  axis.text.x      = element_text(
+    size = 16,
+    family = "sans",
+    hjust = 0.5,
+    vjust = -0.5
+  ),
+  axis.text.y      = element_text(
+    size = 16,
+    family = "sans",
+    hjust = 0,
+    vjust = 0.5
+  ),
+  axis.title.x     = element_text(
+    size = 20,
+    hjust = 0.5,
+    vjust = -0.5
+  ),
+  axis.title.y     = element_text(
+    size = 20,
+    hjust = -0.1,
+    vjust = 0.5
+  ),
+  plot.title       = element_text(
+    lineheight = .8,
+    face = "bold",
+    size = 22
+  ),
+  legend.title     = element_text(size = 20),
+  legend.text      = element_text(size = 18),
+  legend.position  = "right"
+)
+
+results_load_model3 <- 
+  read.csv(here::here("appendix_results", "results_load_model3.csv"))
+results_cov_model3 <- 
+  read.csv(here::here("appendix_results", "results_cov_model3.csv"))
+results_load_model3_highcov <- 
+  read.csv(here::here("appendix_results", "results_load_model3_highcov.csv"))
+results_cov_model3_lowload <- 
+  read.csv(here::here("appendix_results", "results_cov_model3_lowload.csv"))
+
+plot_load_model3 <- results_load_model3 %>%
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(loading_strength))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            linewidth = 1.3,
+            key_glyph = "rect") +
+  geom_hline(
+    yintercept = 95,
+    linetype = "dashed",
+    color = "#F29090",
+    linewidth = 1.3
+  ) +
+  xlab('Sample size\n') + ylab('Power (%)') + 
+  ggtitle('Inter-factor correlation = 0.3* \n') +
+  scale_color_discrete('Loading       \nstrength') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 20)
+  ) +
+  theme_plots
+
+plot_load_model3_highcov <- results_load_model3_highcov %>%
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(loading_strength))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            linewidth = 1.3,
+            key_glyph = "rect") +
+  geom_hline(
+    yintercept = 95,
+    linetype = "dashed",
+    color = "#F29090",
+    linewidth = 1.3
+  ) +
+  xlab('Sample size\n') + ylab('Power (%)') + ggtitle('Inter-factor correlation = 0.7\n') +
+  scale_color_discrete('Loading \nstrength') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 20)
+  ) +
+  theme_plots
+
+plot_cov_model3_lowload <- results_cov_model3_lowload %>%
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(cov1))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            linewidth = 1.3,
+            key_glyph = "rect") +
+  geom_hline(
+    yintercept = 95,
+    linetype = "dashed",
+    color = "#F29090",
+    linewidth = 1.3
+  ) +
+  xlab('Sample size\n') + ylab('Power (%)') + 
+  ggtitle('Factor loading = 0.5\n') +
+  scale_color_discrete('Inter-factor \ncorrelation') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 20)
+  ) +
+  theme_plots
+
+plot_cov_model3 <- results_cov_model3 %>%
+  ggplot(aes(sample_size, best_3 * 100, colour = factor(cov1))) +
+  geom_point() +
+  geom_line(alpha = 0.4,
+            linewidth = 1.3,
+            key_glyph = "rect") +
+  geom_hline(
+    yintercept = 95,
+    linetype = "dashed",
+    color = "#F29090",
+    linewidth = 1.3
+  ) +
+  xlab('Sample size\n') + ylab('Power (%)') + 
+  ggtitle('Factor loading = 0.7*\n') +
+  scale_color_discrete('Inter-factor \ncorrelation') +
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(50, 200),
+    breaks = seq(50, 200, by = 25)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 20)
+  ) +
+  theme_plots
+
+joined_plot <-
+  ggarrange(plot_cov_model3_lowload,
+            plot_cov_model3,
+            plot_load_model3,
+            plot_load_model3_highcov,
+            ncol = 2,
+            nrow = 2)
+joined_plot
+
+```
