@@ -31,7 +31,7 @@ generate_data <- function(condition, fixed_objects = fixed_objects) {
                      )                                                          # HIDE
   if (condition$sim_model == 3) {                                               # HIDE
     parameters <- c(parameters,                                                 # HIDE
-                     b = condition$loading_strength / sqrt(2 + 2 * condition$cov1))
+                     b = condition$loading_strength/sqrt(2+2*condition$cov1))
   }                                                                             # HIDE
   tasks <- str_c("task", 1:13)
   error_vars <- glue::glue_collapse(
@@ -50,7 +50,8 @@ generate_data <- function(condition, fixed_objects = fixed_objects) {
                     )                                                           # HIDE
   } else if (condition$sim_model == 3) {                                        # HIDE
   pop_model <- glue::glue_data(parameters,
-   "ps  =~ {a}*task1 + {a}*task2 + {a}*task3 + {a}*task4 + {b}*task5 + {b}*task6\n 
+   "ps  =~ {a}*task1 + {a}*task2 + {a}*task3 + {a}*task4 + {b}*task5 + 
+           {b}*task6\n 
     pc  =~ {b}*task5 + {b}*task6 + {a}*task7 + {a}*task8 + {a}*task9\n
     gen =~ {a}*task10+ {a}*task11+ {a}*task12+ {a}*task13\n
     {error_vars}
@@ -58,7 +59,8 @@ generate_data <- function(condition, fixed_objects = fixed_objects) {
     ps ~~ {condition$cov2}*gen\n
     pc ~~ {condition$cov3}*gen")
   }                                                                             # HIDE
-  dat <- data.frame(simulateData(pop_model, sample.nobs = condition$sample_size))
+  dat <- data.frame(simulateData(pop_model, 
+                                 sample.nobs = condition$sample_size))
 }                                                                               # HIDE
 
 #----analyze----
