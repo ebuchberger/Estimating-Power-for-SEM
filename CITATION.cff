@@ -1,0 +1,40 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Estimating Statistical Power for Structural Equation
+  Models in Developmental Cognitive Science: A Tutorial in R
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: 'Elisa. S. '
+    family-names: Buchberger
+    email: buchberger@mpib-berlin.mpg.de
+    affiliation: Max-Planck Institute of Human Development
+    orcid: 'https://orcid.org/0000-0001-5377-9722'
+  - given-names: Chi T.
+    family-names: Ngo
+    email: ngo@mpib-berlin.mpg.de
+    affiliation: Max-Planck Institute for Human Development
+    orcid: 'https://orcid.org/0000-0001-6962-7168'
+  - given-names: Aaron
+    family-names: Peikert
+    email: peikert@mpib-berlin.mpg.de
+    affiliation: Max-Planck Institue for Human Development
+    orcid: 'https://orcid.org/0000-0001-7813-818X'
+  - given-names: Andreas
+    family-names: Brandmaier
+    email: brandmaier@mpib-berlin.mpg.de
+    affiliation: MSB Medical School Berlin
+    orcid: 'https://orcid.org/0000-0001-8765-6982'
+  - given-names: Markus
+    family-names: Werkle-Bergner
+    email: werkle@mpib-berlin.mpg.de
+    affiliation: Max-Planck Instute for Human Development
+    orcid: 'https://orcid.org/0000-0002-6399-9996'
+repository-code: 'https://github.com/ebuchberger/Estimating-Power-for-SEM'
+url: >-
+  https://ebuchberger.github.io/Estimating-Power-for-SEM/manuscript.pdf
