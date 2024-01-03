@@ -8,7 +8,7 @@ if(!fs::dir_exists(fs::path_ext_remove(appendix_results))){
 }
 ```
 
-```{r echo = FALSE, message = FALSE, fig.width=11.3, fig.height=8.6, fig.align = 'center',fig.cap = "Estimated statistical power for recovering the data-generating model (y-axis) as a function of sample size (x-axis) depending on (A) loading strength for lower versus higher inter-factor correlation and (B) inter-factor correlation for lower versus higher factor loadings. * denotes results from the original analyses in the main manuscript"}
+```{r echo = FALSE, message = FALSE, fig.width=11.3, fig.height=10.4, fig.align = 'center',fig.cap = "Estimated statistical power for recovering the data-generating model (y-axis) as a function of sample size (x-axis) depending on (A) loading strength for lower versus higher inter-factor correlation and (B) inter-factor correlation for lower versus higher factor loadings. * denotes results from the original analyses in the main manuscript"}
 
 theme_plots <- theme(
   panel.background = element_blank(),
@@ -73,8 +73,8 @@ plot_load_model3 <- results_load_model3 %>%
     linewidth = 1.3
   ) +
   xlab('Sample size\n') + ylab('Power (%)') + 
-  ggtitle('Inter-factor correlation = 0.3* \n') +
-  scale_color_discrete('Loading       \nstrength') +
+  ggtitle('A) \n\nInter-factor correlation = 0.3* \n') +
+  scale_color_discrete('Loading\nstrength   ') +
   scale_x_continuous(
     expand = c(0, 0),
     limits = c(50, 200),
@@ -99,8 +99,9 @@ plot_load_model3_highcov <- results_load_model3_highcov %>%
     color = "#F29090",
     linewidth = 1.3
   ) +
-  xlab('Sample size\n') + ylab('Power (%)') + ggtitle('Inter-factor correlation = 0.7\n') +
-  scale_color_discrete('Loading \nstrength') +
+  xlab('Sample size\n') + ylab('Power (%)') + 
+  ggtitle('\n\nInter-factor correlation = 0.7 \n') +
+  scale_color_discrete('Loading \nstrength   ') +
   scale_x_continuous(
     expand = c(0, 0),
     limits = c(50, 200),
@@ -126,7 +127,7 @@ plot_cov_model3_lowload <- results_cov_model3_lowload %>%
     linewidth = 1.3
   ) +
   xlab('Sample size\n') + ylab('Power (%)') + 
-  ggtitle('Factor loading = 0.5\n') +
+  ggtitle('B) \n\nFactor loading = 0.5\n') +
   scale_color_discrete('Inter-factor \ncorrelation') +
   scale_x_continuous(
     expand = c(0, 0),
@@ -153,7 +154,7 @@ plot_cov_model3 <- results_cov_model3 %>%
     linewidth = 1.3
   ) +
   xlab('Sample size\n') + ylab('Power (%)') + 
-  ggtitle('Factor loading = 0.7*\n') +
+  ggtitle('\n\nFactor loading = 0.7*\n') +
   scale_color_discrete('Inter-factor \ncorrelation') +
   scale_x_continuous(
     expand = c(0, 0),
@@ -167,13 +168,14 @@ plot_cov_model3 <- results_cov_model3 %>%
   ) +
   theme_plots
 
-joined_plot <-
-  ggarrange(plot_cov_model3_lowload,
-            plot_cov_model3,
-            plot_load_model3,
-            plot_load_model3_highcov,
-            ncol = 2,
-            nrow = 2)
+joined_plot <- plot_grid(
+  plot_load_model3
+  , plot_load_model3_highcov
+  , plot_cov_model3_lowload
+  , plot_cov_model3
+  , align = "hv"
+  , ncol = 2
+)
 joined_plot
 
 ```
