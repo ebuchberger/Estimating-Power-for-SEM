@@ -8,7 +8,7 @@ if(!fs::dir_exists(fs::path_ext_remove(appendix_results))){
 }
 ```
 
-```{r echo = FALSE, message = FALSE, fig.width=11.3, fig.height=10.4, fig.align = 'center',fig.cap = "Estimated statistical power for recovering the data-generating model (y-axis) as a function of sample size (x-axis) depending on (A) loading strength for lower versus higher inter-factor correlation and (B) inter-factor correlation for lower versus higher factor loadings. * denotes results from the original analyses in the main manuscript"}
+```{r echo = FALSE, message = FALSE, fig.width=11.3, fig.height=10.4, fig.align = 'center',fig.cap = "Estimated statistical power for correctly selecting the data-generating model (y-axis) as a function of sample size (x-axis) depending on (A) loading strength for lower versus higher inter-factor correlation and (B) inter-factor correlation for lower versus higher factor loadings. * denotes results from the original analyses in the main manuscript"}
 
 theme_plots <- theme(
   panel.background = element_blank(),
